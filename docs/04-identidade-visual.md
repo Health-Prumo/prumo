@@ -1,6 +1,6 @@
 # 4. Identidade visual
 
-![Prumo](../assets/brand/banner.svg)
+![Prumo](../assets/brand/banner-prumo.svg)
 
 ## Conceito
 
