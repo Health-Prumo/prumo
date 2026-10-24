@@ -10,6 +10,8 @@
 
 É exatamente o que o app oferece: um retrato diário que mostra se a rotina está alinhada e qual pequeno ajuste devolve a pessoa ao prumo.
 
+**Lema:** *Saúde no rumo correto.* Aparece no banner e nos logos verticais. Dentro do app, a pergunta que guia o usuário continua sendo *"Como estou hoje?"*.
+
 ### Atributos da marca
 
 | Atributo | Como aparece na marca |

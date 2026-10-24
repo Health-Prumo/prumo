@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/brand/banner.svg" alt="Prumo — Como estou hoje?" width="100%">
+  <img src="assets/brand/banner.svg" alt="Prumo — Saúde no rumo correto" width="100%">
 </p>
 
 <p align="center">
