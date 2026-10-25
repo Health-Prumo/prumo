@@ -117,8 +117,8 @@ Os mockups são feitos em HTML e CSS, em [`assets/mockups/src/`](assets/mockups/
 
 | Integrante | Papel |
 |---|---|
-| Guilherme Geronymo | Gabriel Ramos|
-| _a definir_ | _a definir_ |
+| Guilherme Geronymo | _a definir_ |
+| Gabriel Ramos | _a definir_ |
 
 **Professor mentor:** _a definir_
 
