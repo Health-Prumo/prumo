@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Prumo — telas mobile</title>
+<link rel="stylesheet" href="prumo.css">
+<style>
+  body { width: 1440px; height: 1060px; overflow: hidden; display: flex; align-items: center; justify-content: center; gap: 56px;
+         background: radial-gradient(900px 500px at 50% 0%, #FFFDF8 0%, #F6F1E7 55%, #ECE4D3 100%); }
+  .peca { display: flex; flex-direction: column; align-items: center; gap: 22px; }
+  .peca > .rotulo { color: #8A6328; }
+
+  .celular { width: 406px; height: 860px; border-radius: 60px; padding: 8px; background: #0A0F0D;
+             box-shadow: 0 0 0 1.5px #3A3A36, 0 40px 80px -30px rgba(1, 28, 21, .55), 0 18px 30px -18px rgba(1, 28, 21, .4); }
+  .tela { position: relative; width: 390px; height: 844px; border-radius: 52px; overflow: hidden; display: flex; flex-direction: column;
+          background: radial-gradient(500px 360px at 50% -40px, #0F4536 0%, #03281E 55%, #011812 100%); }
+  .ilha { position: absolute; top: 11px; left: 50%; transform: translateX(-50%); width: 122px; height: 35px; border-radius: 20px; background: #000; }
+  .status { height: 54px; flex: none; display: flex; justify-content: space-between; align-items: center; padding: 6px 32px 0 40px; font-size: 15px; font-weight: 600; }
+  .status .bat { display: flex; gap: 6px; align-items: center; }
+  .status .bat span { width: 24px; height: 11px; border: 1.2px solid rgba(246,241,231,.6); border-radius: 3px; position: relative; }
+  .status .bat span::after { content: ""; position: absolute; inset: 1.5px 5px 1.5px 1.5px; background: var(--cor-marfim); border-radius: 1px; }
+  .conteudo { flex: 1; padding: 6px 20px 0; display: flex; flex-direction: column; gap: 14px; }
+
+  .abas { flex: none; height: 82px; display: flex; justify-content: space-around; padding: 10px 14px 0;
+          background: rgba(1, 20, 15, .92); border-top: 1px solid var(--linha); }
+  .abas div { display: flex; flex-direction: column; align-items: center; gap: 5px; font-size: 10.5px; color: rgba(246,241,231,.5); width: 64px; }
+  .abas .ativo { color: var(--cor-ouro-claro); }
+  .abas .central { width: 50px; height: 50px; margin-top: -22px; border-radius: 50%; background: var(--degrade-ouro); color: var(--cor-noite);
+                   display: grid; place-items: center; box-shadow: 0 8px 20px rgba(0,0,0,.35); }
+  .abas .central .icone { width: 24px; height: 24px; stroke-width: 1.8; }
+
+  /* Hoje */
+  .topo-hoje { display: flex; align-items: center; justify-content: space-between; }
+  .topo-hoje img { height: 34px; }
+  .avatar { width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; background: var(--cor-jade);
+            border: 1px solid var(--cor-ouro); font-family: var(--fonte-titulo); font-size: 17px; color: var(--cor-ouro-claro); }
+  h1.titulo { font-size: 32px; line-height: 1.1; margin-top: 4px; }
+  .resumo { padding: 18px; display: flex; gap: 16px; align-items: center; }
+  .medidor { position: relative; flex: none; }
+  .medidor-centro { position: absolute; inset: 0; display: grid; place-content: center; text-align: center; }
+  .medidor-valor { font-size: 38px; line-height: 1; color: var(--cor-ouro-claro); }
+  .medidor-valor span { font-size: 14px; color: var(--texto-suave); }
+  .medidor .rotulo { font-size: 8.5px; margin-top: 3px; }
+  .resumo h2 { font-size: 21px; line-height: 1.2; margin: 5px 0 6px; }
+  .resumo p { font-size: 12.5px; line-height: 1.5; color: rgba(246,241,231,.75); }
+  .resumo p b { color: var(--cor-ouro-claro); font-weight: 500; }
+  .sugestao { display: flex; gap: 12px; align-items: center; padding: 13px 14px; font-size: 12.5px; line-height: 1.45; }
+  .sugestao .ic { width: 34px; height: 34px; flex: none; border-radius: 50%; display: grid; place-items: center; background: rgba(201,161,92,.12); color: var(--cor-ouro); }
+  .sugestao .ic .icone { width: 17px; height: 17px; }
+  .sugestao b { display: block; font-weight: 600; font-size: 13px; }
+  .sugestao .seta { margin-left: auto; color: var(--cor-ouro); width: 16px; height: 16px; }
+  .mini { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .mini .card { padding: 12px; border-radius: 14px; }
+  .mini .icone { width: 16px; height: 16px; color: var(--cor-ouro); }
+  .mini .nome { font-size: 10.5px; color: var(--texto-suave); margin-top: 6px; }
+  .mini .valor { font-family: var(--fonte-titulo); font-variant-numeric: lining-nums; font-size: 22px; line-height: 1.15; }
+  .mini .valor small { font-size: 12px; color: var(--texto-suave); }
+  .mini .selo { font-size: 10px; gap: 4px; }
+  .mini .selo::before { width: 5px; height: 5px; }
+
+  /* Registrar */
+  .topo-reg { display: flex; align-items: center; gap: 12px; }
+  .topo-reg .voltar { width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--linha); display: grid; place-items: center; }
+  .topo-reg .voltar .icone { width: 18px; height: 18px; }
+  .progresso { display: flex; gap: 6px; }
+  .progresso span { flex: 1; height: 3px; border-radius: 3px; background: rgba(246,241,231,.12); }
+  .progresso span.ok { background: var(--cor-ouro); }
+  .campo { padding: 14px 16px; border-radius: 14px; }
+  .campo .cab { display: flex; align-items: center; gap: 10px; font-size: 13.5px; font-weight: 500; }
+  .campo .cab .icone { width: 17px; height: 17px; color: var(--cor-ouro); }
+  .campo .cab .dir { margin-left: auto; font-size: 11.5px; color: var(--texto-suave); font-weight: 400; }
+  .stepper { display: flex; align-items: center; justify-content: space-between; margin-top: 10px; }
+  .stepper .bt { width: 34px; height: 34px; border-radius: 50%; border: 1px solid var(--linha); display: grid; place-items: center; font-size: 18px; color: var(--cor-ouro); }
+  .stepper .num { font-family: var(--fonte-titulo); font-variant-numeric: lining-nums; font-size: 30px; }
+  .segmentos { display: flex; gap: 6px; margin-top: 10px; }
+  .segmentos span { flex: 1; text-align: center; font-size: 11.5px; padding: 8px 0; border-radius: 99px; border: 1px solid var(--linha); color: var(--texto-suave); }
+  .segmentos span.on { background: rgba(201,161,92,.15); border-color: var(--cor-ouro); color: var(--cor-ouro-claro); }
+  .copos { display: flex; gap: 7px; margin-top: 10px; }
+  .copos .icone { width: 26px; height: 26px; color: rgba(246,241,231,.2); }
+  .copos .icone.on { color: var(--cor-ouro); fill: rgba(201,161,92,.25); }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+  .chips span { font-size: 11.5px; padding: 7px 11px; border-radius: 99px; border: 1px solid var(--linha); color: var(--texto-suave); }
+  .chips span.on { background: rgba(201,161,92,.15); border-color: var(--cor-ouro); color: var(--cor-ouro-claro); }
+  .rostos { display: flex; justify-content: space-between; margin-top: 10px; }
+  .rostos span { width: 50px; height: 34px; border-radius: 10px; display: grid; place-items: center; border: 1px solid var(--linha); font-size: 12px; color: var(--texto-suave); }
+  .rostos span.on { background: rgba(201,161,92,.15); border-color: var(--cor-ouro); color: var(--cor-ouro-claro); font-weight: 600; }
+  .deslizante { position: relative; height: 4px; border-radius: 4px; background: rgba(246,241,231,.12); margin: 18px 4px 6px; }
+  .deslizante i { position: absolute; left: 0; top: 0; bottom: 0; width: 42%; border-radius: 4px; background: var(--degrade-ouro); }
+  .deslizante b { position: absolute; left: 42%; top: 50%; width: 18px; height: 18px; margin: -9px 0 0 -9px; border-radius: 50%; background: var(--cor-ouro-claro); box-shadow: 0 0 0 4px rgba(201,161,92,.25); }
+  .escala { display: flex; justify-content: space-between; font-size: 10px; color: rgba(246,241,231,.4); }
+  .acao { margin: auto 0 26px; justify-content: center; padding: 15px; font-size: 15px; }
+
+  /* Coach */
+  .topo-coach { display: flex; align-items: center; gap: 12px; padding-bottom: 12px; border-bottom: 1px solid var(--linha); }
+  .topo-coach img { width: 30px; }
+  .topo-coach h2 { font-size: 22px; line-height: 1; }
+  .topo-coach .selo { font-size: 11px; margin-top: 4px; }
+  .aviso-chat { font-size: 10.5px; text-align: center; color: rgba(246,241,231,.45); }
+  .msgs { display: flex; flex-direction: column; gap: 10px; }
+  .msg { font-size: 13px; line-height: 1.55; padding: 11px 14px; border-radius: 16px; max-width: 86%; }
+  .msg.eu { align-self: flex-end; background: var(--cor-jade); border-bottom-right-radius: 4px; }
+  .msg.ia { background: rgba(1,28,21,.6); border: 1px solid var(--linha); border-bottom-left-radius: 4px; }
+  .msg.ia b { color: var(--cor-ouro-claro); font-weight: 500; }
+  .msg .mini-graf { display: flex; align-items: flex-end; gap: 5px; height: 46px; margin: 10px 0 4px; }
+  .msg .mini-graf span { flex: 1; border-radius: 3px 3px 0 0; background: #1D5E4B; }
+  .msg .mini-graf span.ultimo { background: var(--cor-ouro); }
+  .msg .legenda { font-size: 10px; color: var(--texto-suave); display: flex; justify-content: space-between; }
+  .hora { font-size: 10px; color: rgba(246,241,231,.4); }
+  .atalhos { display: flex; gap: 6px; flex-wrap: wrap; margin-top: auto; }
+  .atalhos span { font-size: 11.5px; padding: 7px 12px; border-radius: 99px; border: 1px solid var(--cor-ouro); color: var(--cor-ouro-claro); }
+  .entrada { display: flex; align-items: center; gap: 10px; padding: 8px 8px 8px 16px; border-radius: 999px; border: 1px solid var(--linha);
+             background: rgba(1,20,15,.6); font-size: 13px; color: rgba(246,241,231,.4); margin-bottom: 30px; }
+  .entrada .enviar { margin-left: auto; width: 36px; height: 36px; border-radius: 50%; background: var(--degrade-ouro); display: grid; place-items: center; color: var(--cor-noite); }
+  .entrada .enviar .icone { width: 16px; height: 16px; }
+</style>
+</head>
+<body>
+
+  <!-- 1. Hoje -->
+  <div class="peca">
+    <div class="celular"><div class="tela">
+      <div class="ilha"></div>
+      <div class="status"><span>9:41</span><span class="bat"><span></span></span></div>
+      <div class="conteudo">
+        <div class="topo-hoje">
+          <div>
+            <div class="rotulo">Sábado, 24 de outubro</div>
+            <h1 class="titulo">Boa tarde, Marina.</h1>
+          </div>
+          <div class="avatar">M</div>
+        </div>
+        <div class="card resumo">
+          <div class="medidor" data-valor="6.8" data-tamanho="118"></div>
+          <div>
+            <div class="rotulo" style="font-size:9.5px">Análise do seu dia</div>
+            <h2 class="titulo">Bom dia, com o sono pedindo atenção.</h2>
+            <p>Você dormiu <b>5h40</b>, abaixo do seu padrão de <b>6h40</b>.</p>
+          </div>
+        </div>
+        <div class="rotulo" style="margin-top:2px">Sugestões para hoje</div>
+        <div class="card sugestao"><span class="ic"><i data-i="atividade"></i></span><div><b>Caminhe 20 minutos</b><span class="suave">Faltam 40 min para a meta da OMS</span></div><i data-i="seta" class="seta"></i></div>
+        <div class="card sugestao"><span class="ic"><i data-i="sono"></i></span><div><b>Durma 30 min mais cedo</b><span class="suave">Celular fora do quarto às 22h30</span></div><i data-i="seta" class="seta"></i></div>
+        <div class="mini">
+          <div class="card"><i data-i="sono"></i><div class="nome">Sono</div><div class="valor">5h40</div><div class="selo atencao">Abaixo</div></div>
+          <div class="card"><i data-i="atividade"></i><div class="nome">Atividade</div><div class="valor">35 <small>min</small></div><div class="selo positivo">Boa</div></div>
+          <div class="card"><i data-i="agua"></i><div class="nome">Água</div><div class="valor">1,6 <small>L</small></div><div class="selo atencao">Faltam 0,4</div></div>
+          <div class="card"><i data-i="alimentacao"></i><div class="nome">Alimentação</div><div class="valor">8 <small>/10</small></div><div class="selo positivo">Ótima</div></div>
+          <div class="card"><i data-i="humor"></i><div class="nome">Humor</div><div class="valor">4 <small>/5</small></div><div class="selo positivo">Disposta</div></div>
+          <div class="card"><i data-i="tela"></i><div class="nome">Tela</div><div class="valor">3h20</div><div class="selo critico">Alta</div></div>
+        </div>
+      </div>
+      <div class="abas">
+        <div class="ativo"><i data-i="hoje"></i>Hoje</div>
+        <div><i data-i="historico"></i>Histórico</div>
+        <div><span class="central"><i data-i="registrar"></i></span></div>
+        <div><i data-i="coach"></i>Coach</div>
+        <div><i data-i="perfil"></i>Perfil</div>
+      </div>
+    </div></div>
+    <div class="rotulo">Hoje</div>
+  </div>
+
+  <!-- 2. Registrar o dia -->
+  <div class="peca">
+    <div class="celular"><div class="tela">
+      <div class="ilha"></div>
+      <div class="status"><span>9:41</span><span class="bat"><span></span></span></div>
+      <div class="conteudo" style="gap:10px">
+        <div class="topo-reg">
+          <span class="voltar"><i data-i="voltar"></i></span>
+          <div><div class="rotulo" style="font-size:9.5px">Leva menos de 1 minuto</div><div class="titulo" style="font-size:24px;line-height:1.1">Registrar o dia</div></div>
+        </div>
+        <div class="progresso"><span class="ok"></span><span class="ok"></span><span class="ok"></span><span class="ok"></span><span class="ok"></span><span></span></div>
+
+        <div class="card campo">
+          <div class="cab"><i data-i="sono"></i>Sono<span class="dir">média: 6h40</span></div>
+          <div class="stepper"><span class="bt">−</span><span class="num">5h40</span><span class="bt">+</span></div>
+        </div>
+        <div class="card campo">
+          <div class="cab"><i data-i="atividade"></i>Atividade física<span class="dir">35 min</span></div>
+          <div class="segmentos"><span>Leve</span><span class="on">Moderada</span><span>Vigorosa</span></div>
+        </div>
+        <div class="card campo">
+          <div class="cab"><i data-i="agua"></i>Água<span class="dir">6 copos · 1,6 L</span></div>
+          <div class="copos">
+            <i data-i="agua" class="on"></i><i data-i="agua" class="on"></i><i data-i="agua" class="on"></i><i data-i="agua" class="on"></i>
+            <i data-i="agua" class="on"></i><i data-i="agua" class="on"></i><i data-i="agua"></i><i data-i="agua"></i>
+          </div>
+        </div>
+        <div class="card campo">
+          <div class="cab"><i data-i="alimentacao"></i>Alimentação<span class="dir">Guia Alimentar</span></div>
+          <div class="chips"><span class="on">Frutas e verduras</span><span class="on">Refeição caseira</span><span>Ultraprocessados</span></div>
+        </div>
+        <div class="card campo">
+          <div class="cab"><i data-i="humor"></i>Humor e energia</div>
+          <div class="rostos"><span>1</span><span>2</span><span>3</span><span class="on">4</span><span>5</span></div>
+        </div>
+        <div class="card campo">
+          <div class="cab"><i data-i="tela"></i>Tela no lazer<span class="dir" style="color:var(--cor-ouro-claro)">3h20</span></div>
+          <div class="deslizante"><i></i><b></b></div>
+          <div class="escala"><span>0 h</span><span>4 h</span><span>8 h</span></div>
+        </div>
+        <span class="botao acao"><i data-i="ia"></i>Gerar minha análise</span>
+      </div>
+    </div></div>
+    <div class="rotulo">Registrar o dia</div>
+  </div>
+
+  <!-- 3. Coach -->
+  <div class="peca">
+    <div class="celular"><div class="tela">
+      <div class="ilha"></div>
+      <div class="status"><span>9:41</span><span class="bat"><span></span></span></div>
+      <div class="conteudo">
+        <div class="topo-coach">
+          <span class="voltar" style="width:36px;height:36px;border-radius:50%;border:1px solid var(--linha);display:grid;place-items:center"><i data-i="voltar" style="width:18px;height:18px"></i></span>
+          <img src="../../brand/simbolo.svg" alt="">
+          <div><h2 class="titulo">Coach Prumo</h2><div class="selo positivo">conhece seus últimos 30 dias</div></div>
+        </div>
+        <div class="aviso-chat">O Coach Prumo não substitui orientação médica.</div>
+        <div class="msgs">
+          <div class="msg eu">Por que estou mais cansada essa semana?</div>
+          <div class="msg ia">
+            Desde quarta, seu sono caiu de <b>7h30</b> para <b>5h40</b>:
+            <div class="mini-graf"><span style="height:87%"></span><span style="height:96%"></span><span style="height:80%"></span><span style="height:100%"></span><span style="height:91%"></span><span style="height:81%"></span><span class="ultimo" style="height:76%"></span></div>
+            <div class="legenda"><span>Dom</span><span>Sáb</span></div>
+          </div>
+          <div class="msg ia">Nas mesmas noites, seu tempo de tela passou de <b>3 horas</b>. Que tal desligar as telas 1 hora antes de dormir por 3 dias e ver como sua energia responde?</div>
+          <div class="hora">Coach · agora</div>
+          <div class="msg eu">Topo! Me lembra às 22h30?</div>
+          <div class="msg ia">Combinado. Vou te avisar às <b>22h30</b> hoje, amanhã e segunda. 🌙</div>
+        </div>
+        <div class="atalhos"><span>Como foi meu mês?</span><span>Dicas para dormir</span><span>Lanches saudáveis</span></div>
+        <div class="entrada">Pergunte sobre a sua semana…<span class="enviar"><i data-i="enviar"></i></span></div>
+      </div>
+    </div></div>
+    <div class="rotulo">Coach IA</div>
+  </div>
+
+  <script src="icones.js"></script>
+</body>
+</html>

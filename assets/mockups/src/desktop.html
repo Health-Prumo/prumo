@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Prumo — Hoje (desktop)</title>
+<link rel="stylesheet" href="prumo.css">
+<style>
+  body { width: 1440px; height: 1080px; display: flex; overflow: hidden;
+         background: radial-gradient(1200px 600px at 60% -10%, #0F4536 0%, #03281E 50%, #011812 100%); }
+
+  /* menu lateral */
+  aside { width: 256px; padding: 32px 22px; display: flex; flex-direction: column;
+          background: rgba(1, 20, 15, .7); border-right: 1px solid var(--linha); }
+  aside .logo { height: 44px; margin: 0 0 44px 8px; }
+  nav a { display: flex; align-items: center; gap: 14px; padding: 12px 14px; border-radius: 10px;
+          font-size: 14px; color: var(--texto-suave); text-decoration: none; margin-bottom: 4px; position: relative; }
+  nav a.ativo { color: var(--cor-marfim); background: rgba(201, 161, 92, .09); }
+  nav a.ativo::before { content: ""; position: absolute; left: -22px; top: 10px; bottom: 10px; width: 2px; background: var(--cor-ouro); }
+  nav a.ativo .icone { color: var(--cor-ouro); }
+  nav .contador { margin-left: auto; font-size: 11px; color: var(--cor-noite); background: var(--cor-ouro); border-radius: 99px; padding: 1px 7px; font-weight: 600; }
+  .usuario { margin-top: auto; display: flex; align-items: center; gap: 12px; padding: 14px; border-top: 1px solid var(--linha); }
+  .avatar { width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center;
+            background: var(--cor-jade); border: 1px solid var(--cor-ouro); font-family: var(--fonte-titulo); font-size: 18px; color: var(--cor-ouro-claro); }
+  .aviso { font-size: 10.5px; line-height: 1.5; color: rgba(246, 241, 231, .4); padding: 12px 14px 0; }
+
+  /* conteúdo */
+  main { flex: 1; padding: 36px 48px; display: flex; flex-direction: column; gap: 22px; }
+  header { display: flex; align-items: flex-end; justify-content: space-between; }
+  header h1 { font-size: 44px; line-height: 1.1; margin-top: 8px; }
+  header .acoes { display: flex; align-items: center; gap: 18px; }
+  .sino { width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--linha); display: grid; place-items: center; color: var(--texto-suave); }
+
+  .linha1 { display: grid; grid-template-columns: 2fr 1fr; gap: 22px; }
+  .seu-dia { padding: 28px 32px; display: flex; gap: 36px; align-items: center; }
+  .medidor { position: relative; flex: none; }
+  .medidor-centro { position: absolute; inset: 0; display: grid; place-content: center; text-align: center; gap: 2px; }
+  .medidor-valor { font-size: 56px; line-height: 1; color: var(--cor-ouro-claro); }
+  .medidor-valor span { font-size: 20px; color: var(--texto-suave); }
+  .analise h2 { font-size: 30px; margin: 6px 0 12px; }
+  .analise p { font-size: 14.5px; line-height: 1.65; color: rgba(246, 241, 231, .8); }
+  .analise p b { color: var(--cor-ouro-claro); font-weight: 500; }
+  .sugestoes { display: flex; gap: 12px; margin-top: 18px; }
+  .sugestao { flex: 1; display: flex; gap: 12px; align-items: flex-start; padding: 14px 16px; border-radius: 12px;
+              background: rgba(1, 28, 21, .45); border: 1px solid var(--linha); font-size: 13px; line-height: 1.5; }
+  .sugestao .icone { color: var(--cor-ouro); flex: none; margin-top: 1px; }
+  .sugestao b { display: block; font-weight: 600; margin-bottom: 2px; }
+
+  .meta { padding: 28px 30px; display: flex; flex-direction: column; }
+  .meta .numero { font-family: var(--fonte-titulo); font-variant-numeric: lining-nums; font-size: 52px; line-height: 1; margin: 18px 0 4px; }
+  .meta .numero span { font-size: 22px; color: var(--texto-suave); }
+  .meta .barra { height: 8px; margin: 18px 0 12px; }
+  .semana { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; margin-top: auto; }
+  .semana div { text-align: center; font-size: 10.5px; color: var(--texto-suave); }
+  .semana i, .semana svg { display: block; margin: 0 auto 6px; }
+  .bolinha { width: 26px; height: 26px; border-radius: 50%; margin: 0 auto 6px; border: 1px solid var(--linha); display: grid; place-items: center; }
+  .bolinha.feito { background: rgba(201, 161, 92, .18); border-color: var(--cor-ouro); color: var(--cor-ouro-claro); }
+  .bolinha .icone { width: 13px; height: 13px; margin: 0; }
+
+  .habitos { display: grid; grid-template-columns: repeat(6, 1fr); gap: 16px; }
+  .habito { padding: 18px 18px 16px; }
+  .habito .topo { display: flex; align-items: center; justify-content: space-between; color: var(--cor-ouro); }
+  .habito .nome { font-size: 12px; color: var(--texto-suave); margin-top: 14px; }
+  .habito .valor { font-family: var(--fonte-titulo); font-variant-numeric: lining-nums; font-size: 32px; line-height: 1.15; }
+  .habito .valor small { font-size: 16px; color: var(--texto-suave); }
+  .habito .selo { margin-top: 8px; }
+
+  .linha3 { display: grid; grid-template-columns: 3fr 2fr; gap: 22px; flex: 1; }
+  .evolucao { padding: 24px 28px; }
+  .evolucao .cab { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 14px; }
+  .evolucao h3, .coach h3 { font-size: 24px; }
+  .legenda { display: flex; gap: 18px; font-size: 12px; color: var(--texto-suave); }
+  .legenda span::before { content: ""; display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 6px; vertical-align: -1px; }
+  .legenda .l-sono::before { background: #1D5E4B; }
+  .legenda .l-energia::before { background: var(--cor-ouro); border-radius: 50%; }
+
+  .coach { padding: 24px 26px; display: flex; flex-direction: column; }
+  .coach .cab { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+  .coach .cab img { width: 30px; }
+  .coach .cab .online { margin-left: auto; }
+  .msg { font-size: 13px; line-height: 1.55; padding: 11px 15px; border-radius: 14px; max-width: 88%; margin-bottom: 10px; }
+  .msg.eu { align-self: flex-end; background: var(--cor-jade); border-bottom-right-radius: 4px; }
+  .msg.ia { background: rgba(1, 28, 21, .55); border: 1px solid var(--linha); border-bottom-left-radius: 4px; }
+  .msg.ia b { color: var(--cor-ouro-claro); font-weight: 500; }
+  .entrada { margin-top: auto; display: flex; align-items: center; gap: 10px; padding: 10px 10px 10px 16px;
+             border-radius: 999px; border: 1px solid var(--linha); font-size: 13px; color: rgba(246, 241, 231, .4); }
+  .entrada .enviar { margin-left: auto; width: 34px; height: 34px; border-radius: 50%; background: var(--degrade-ouro); display: grid; place-items: center; color: var(--cor-noite); }
+  .entrada .enviar .icone { width: 16px; height: 16px; }
+</style>
+</head>
+<body>
+  <aside>
+    <img class="logo" src="../../brand/logo-horizontal.svg" alt="Prumo">
+    <nav>
+      <a class="ativo"><i data-i="hoje"></i>Hoje</a>
+      <a><i data-i="registrar"></i>Registrar o dia</a>
+      <a><i data-i="historico"></i>Histórico</a>
+      <a><i data-i="coach"></i>Coach IA <span class="contador">1</span></a>
+      <a><i data-i="perfil"></i>Perfil e privacidade</a>
+    </nav>
+    <div class="usuario">
+      <div class="avatar">M</div>
+      <div><div style="font-size:14px;font-weight:500">Marina Alves</div><div class="suave" style="font-size:12px">12 dias seguidos</div></div>
+    </div>
+    <p class="aviso">O Prumo não substitui orientação médica.</p>
+  </aside>
+
+  <main>
+    <header>
+      <div>
+        <div class="rotulo">Sábado, 24 de outubro</div>
+        <h1 class="titulo">Boa tarde, Marina.</h1>
+      </div>
+      <div class="acoes">
+        <div class="sino"><i data-i="sino"></i></div>
+        <span class="botao"><i data-i="registrar"></i>Registrar o dia</span>
+      </div>
+    </header>
+
+    <section class="linha1">
+      <div class="card seu-dia">
+        <div class="medidor" data-valor="6.8" data-tamanho="190"></div>
+        <div class="analise">
+          <div class="rotulo"><i data-i="ia" style="width:14px;height:14px;vertical-align:-2px;margin-right:6px"></i>Análise do seu dia</div>
+          <h2 class="titulo">Um bom dia, com o sono pedindo atenção.</h2>
+          <p>Você dormiu <b>5h40</b>, abaixo do seu padrão de <b>6h40</b> nos últimos 7 dias. Em compensação, a atividade física foi boa e você já está a <b>40 minutos</b> da meta semanal da OMS.</p>
+          <div class="sugestoes">
+            <div class="sugestao"><i data-i="atividade"></i><div><b>Caminhe 20 minutos</b>depois do almoço, em ritmo moderado.</div></div>
+            <div class="sugestao"><i data-i="sono"></i><div><b>Durma 30 min mais cedo</b>e deixe o celular fora do quarto às 22h30.</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card meta">
+        <div class="rotulo">Meta semanal · OMS</div>
+        <div class="numero">110<span> / 150 min</span></div>
+        <div class="suave" style="font-size:13px">de atividade física moderada</div>
+        <div class="barra"><span style="width:73%"></span></div>
+        <div style="font-size:13px"><span class="ouro">Faltam 40 min</span> <span class="suave">· 2 dias para fechar a semana</span></div>
+        <div class="semana">
+          <div><div class="bolinha feito"><i data-i="check"></i></div>D</div>
+          <div><div class="bolinha feito"><i data-i="check"></i></div>S</div>
+          <div><div class="bolinha"></div>T</div>
+          <div><div class="bolinha feito"><i data-i="check"></i></div>Q</div>
+          <div><div class="bolinha feito"><i data-i="check"></i></div>Q</div>
+          <div><div class="bolinha"></div>S</div>
+          <div><div class="bolinha feito"><i data-i="check"></i></div>S</div>
+        </div>
+        <div class="suave" style="font-size:11px;margin-top:18px;padding-top:14px;border-top:1px solid var(--linha)">Referência: Diretrizes da OMS (2020), 150 a 300 min por semana.</div>
+      </div>
+    </section>
+
+    <section class="habitos">
+      <div class="card habito"><div class="topo"><i data-i="sono"></i></div><div class="nome">Sono</div><div class="valor">5h40</div><div class="selo atencao">Abaixo do padrão</div></div>
+      <div class="card habito"><div class="topo"><i data-i="atividade"></i></div><div class="nome">Atividade</div><div class="valor">35 <small>min</small></div><div class="selo positivo">Boa</div></div>
+      <div class="card habito"><div class="topo"><i data-i="agua"></i></div><div class="nome">Água</div><div class="valor">1,6 <small>/ 2,0 L</small></div><div class="selo atencao">Faltam 400 ml</div></div>
+      <div class="card habito"><div class="topo"><i data-i="alimentacao"></i></div><div class="nome">Alimentação</div><div class="valor">8 <small>/ 10</small></div><div class="selo positivo">Comida de verdade</div></div>
+      <div class="card habito"><div class="topo"><i data-i="humor"></i></div><div class="nome">Humor</div><div class="valor">4 <small>/ 5</small></div><div class="selo positivo">Disposta</div></div>
+      <div class="card habito"><div class="topo"><i data-i="tela"></i></div><div class="nome">Tela no lazer</div><div class="valor">3h20</div><div class="selo critico">Acima de 3 h</div></div>
+    </section>
+
+    <section class="linha3">
+      <div class="card evolucao">
+        <div class="cab">
+          <h3 class="titulo">Últimos 7 dias</h3>
+          <div class="legenda"><span class="l-energia">Energia (0 a 10)</span><span class="l-sono">Sono (horas)</span></div>
+        </div>
+        <div class="grafico-semana" data-largura="636" data-altura="196"></div>
+      </div>
+
+      <div class="card coach">
+        <div class="cab">
+          <img src="../../brand/simbolo.svg" alt="">
+          <h3 class="titulo">Coach Prumo</h3>
+          <span class="selo positivo online">online</span>
+        </div>
+        <div class="msg eu">Por que estou mais cansada essa semana?</div>
+        <div class="msg ia">Desde quarta, seu sono caiu de <b>7h30</b> para <b>5h40</b>, enquanto o tempo de tela à noite subiu. Que tal testar uma rotina de desligar as telas 1 hora antes de dormir?</div>
+        <div class="entrada">Pergunte sobre a sua semana…<span class="enviar"><i data-i="enviar"></i></span></div>
+      </div>
+    </section>
+  </main>
+  <script src="icones.js"></script>
+</body>
+</html>

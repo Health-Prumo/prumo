@@ -72,14 +72,30 @@ A decisão central é **separar o cálculo da explicação**: o código calcula 
 
 → [Guia de identidade visual completo](docs/04-identidade-visual.md)
 
+## Protótipo visual
+
+Primeira proposta de interface, já com a identidade visual aplicada. Os dados são fictícios.
+
+**Web: tela inicial ("Hoje")**
+
+<img src="assets/mockups/desktop-hoje.png" alt="Tela inicial do Prumo no computador" width="100%">
+
+**Mobile: Hoje, Registrar o dia e Coach IA**
+
+<img src="assets/mockups/mobile-telas.png" alt="Telas do Prumo no celular" width="100%">
+
+Os mockups são feitos em HTML e CSS, em [`assets/mockups/src/`](assets/mockups/src/), e servem de base para o front-end do Checkpoint 2.
+
 ## Estrutura do repositório
 
 ```
 .
 ├── README.md
 ├── assets/
-│   └── brand/          # logo, símbolo, ícone do app e paleta (SVG)
-│       └── png/        # exportações em PNG e o ícone original
+│   ├── brand/          # logo, símbolo, ícone do app e paleta (SVG)
+│   │   └── png/        # exportações em PNG e o ícone original
+│   └── mockups/        # protótipo visual (PNG)
+│       └── src/        # fontes dos mockups em HTML e CSS
 └── docs/
     ├── 01-problema.md
     ├── 02-bases-de-dados.md

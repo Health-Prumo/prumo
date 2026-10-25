@@ -1,0 +1,56 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Inter:wght@400;500;600&display=swap');
+
+:root {
+  --cor-noite: #011C15;
+  --cor-esmeralda: #0B392E;
+  --cor-jade: #14503F;
+  --cor-ouro: #C9A15C;
+  --cor-ouro-claro: #EBCB8F;
+  --cor-marfim: #F6F1E7;
+  --degrade-ouro: linear-gradient(135deg, #8C6430 0%, #C9A15C 45%, #EBCB8F 80%, #F7D69E 100%);
+  --cor-positivo: #7FB89A;
+  --cor-atencao: #E0B25A;
+  --cor-critico: #D9826B;
+  --linha: rgba(201, 161, 92, .18);
+  --texto-suave: rgba(246, 241, 231, .62);
+  --fonte-titulo: 'Cormorant Garamond', Georgia, serif;
+  --fonte-texto: 'Inter', system-ui, sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--fonte-texto);
+  color: var(--cor-marfim);
+  background: var(--cor-noite);
+  -webkit-font-smoothing: antialiased;
+}
+
+.titulo { font-family: var(--fonte-titulo); font-weight: 500; letter-spacing: .01em; font-variant-numeric: lining-nums; }
+.rotulo { font-size: 11px; font-weight: 500; letter-spacing: .2em; text-transform: uppercase; color: var(--cor-ouro); }
+.suave { color: var(--texto-suave); }
+.ouro { color: var(--cor-ouro-claro); }
+
+.card {
+  background: linear-gradient(180deg, rgba(20, 80, 63, .55), rgba(11, 57, 46, .55));
+  border: 1px solid var(--linha);
+  border-radius: 16px;
+}
+
+.botao {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--degrade-ouro); color: var(--cor-noite);
+  font-weight: 600; font-size: 14px; letter-spacing: .02em;
+  border-radius: 999px; padding: 12px 22px;
+}
+
+.selo { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 500; }
+.selo::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+.positivo { color: var(--cor-positivo); }
+.atencao { color: var(--cor-atencao); }
+.critico { color: var(--cor-critico); }
+
+.icone { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+
+.barra { height: 6px; border-radius: 99px; background: rgba(246, 241, 231, .08); overflow: hidden; }
+.barra > span { display: block; height: 100%; border-radius: 99px; background: var(--degrade-ouro); }
