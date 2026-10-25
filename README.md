@@ -25,19 +25,19 @@ Quase um terço dos adultos do mundo não se movimenta o suficiente, e boa parte
 
 Adultos sedentários sabem que precisam mudar de hábitos, mas não enxergam a própria rotina com clareza nem conseguem transformar recomendações genéricas em ações concretas para o dia de hoje.
 
-- **Público-alvo:** adultos sedentários (18 a 59 anos) que buscam uma vida mais saudável. *(O recorte para universitários está em avaliação pelo grupo.)*
+- **Público-alvo:** adultos sedentários (18 a 59 anos) que buscam uma vida mais saudável. _(O recorte para universitários está em avaliação pelo grupo.)_
 - **ODS 3, meta 3.4:** prevenção de doenças crônicas não transmissíveis e promoção do bem-estar.
 
 → [Definição completa do problema](docs/01-problema.md)
 
 ## Bases de dados públicas
 
-| Base | Responsável | Uso no Prumo |
-|---|---|---|
-| Vigitel | Ministério da Saúde | Comparação com adultos das capitais (atividade, tela, alimentação) |
-| PNS 2019 | IBGE | Comparação nacional e por região |
-| Diretrizes de atividade física (2020) | OMS | Meta semanal de 150 a 300 min |
-| Guia Alimentar para a População Brasileira | Ministério da Saúde | Avaliação da alimentação |
+| Base                                       | Responsável         | Uso no Prumo                                                       |
+| ------------------------------------------ | ------------------- | ------------------------------------------------------------------ |
+| Vigitel                                    | Ministério da Saúde | Comparação com adultos das capitais (atividade, tela, alimentação) |
+| PNS 2019                                   | IBGE                | Comparação nacional e por região                                   |
+| Diretrizes de atividade física (2020)      | OMS                 | Meta semanal de 150 a 300 min                                      |
+| Guia Alimentar para a População Brasileira | Ministério da Saúde | Avaliação da alimentação                                           |
 
 → [Detalhes, indicadores e links](docs/02-bases-de-dados.md)
 
@@ -49,13 +49,13 @@ Login ─► Registrar o dia ─► Análise da IA ─► Histórico e gráficos
 
 A decisão central é **separar o cálculo da explicação**: o código calcula as notas com regras fixas (comparando com a média dos últimos 7 dias do usuário e com as metas oficiais), e o LLM só transforma esses números num card "Seu dia" com 1 ou 2 sugestões. Um chatbot que conhece o histórico do usuário completa a experiência.
 
-| Camada | Tecnologia |
-|---|---|
-| Front-end | React + TypeScript (Vite), web responsivo, Recharts |
-| API | Python (local; alvo: API Gateway + AWS Lambda) |
-| Banco | Local no desenvolvimento; alvo: DynamoDB |
-| Login | Alvo: Amazon Cognito |
-| IA | Amazon Bedrock (Claude Haiku ou Nova Micro), com modo mock para desenvolvimento |
+| Camada    | Tecnologia                                                                      |
+| --------- | ------------------------------------------------------------------------------- |
+| Front-end | React + TypeScript (Vite), web responsivo, Recharts                             |
+| API       | Python (local; alvo: API Gateway + AWS Lambda)                                  |
+| Banco     | Local no desenvolvimento; alvo: DynamoDB                                        |
+| Login     | Alvo: Amazon Cognito                                                            |
+| IA        | Amazon Bedrock (Claude Haiku ou Nova Micro), com modo mock para desenvolvimento |
 
 → [Proposta completa, regras de pontuação, justificativas e LGPD](docs/03-solucao.md)
 
@@ -107,18 +107,19 @@ Os mockups são feitos em HTML e CSS, em [`assets/mockups/src/`](assets/mockups/
 
 ## Cronograma
 
-| Período | Etapa | Status |
-|---|---|---|
-| 19/10 a 30/10 | Checkpoint 1: Ideação | 🟡 em andamento |
-| 09/11 a 27/11 | Checkpoint 2: Protótipo funcional, README com prints e vídeo | ⚪ |
-| 07 e 08/12 | Apresentação final à banca | ⚪ |
+| Período       | Etapa                                                        | Status          |
+| ------------- | ------------------------------------------------------------ | --------------- |
+| 19/10 a 30/10 | Checkpoint 1: Ideação                                        | 🟡 em andamento |
+| 09/11 a 27/11 | Checkpoint 2: Protótipo funcional, README com prints e vídeo | ⚪              |
+| 07 e 08/12    | Apresentação final à banca                                   | ⚪              |
 
 ## Equipe
 
-| Integrante | Papel |
-|---|---|
-| Guilherme Geronymo | _a definir_ |
-| Gabriel Ramos | _a definir_ |
+| Integrante         |
+| ------------------ |
+| Guilherme Geronymo |
+| Gabriel Ramos      |
+| Eduardo Sannini    |
 
 **Professor mentor:** _a definir_
 
