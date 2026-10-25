@@ -109,7 +109,7 @@ Os mockups são feitos em HTML e CSS, em [`assets/mockups/src/`](assets/mockups/
 
 | Período       | Etapa                                                        | Status          |
 | ------------- | ------------------------------------------------------------ | --------------- |
-| 19/10 a 30/10 | Checkpoint 1: Ideação                                        | 🟡 em andamento |
+| 19/10 a 30/10 | Checkpoint 1: Ideação                                        | 🟢 concluído    |
 | 09/11 a 27/11 | Checkpoint 2: Protótipo funcional, README com prints e vídeo | ⚪              |
 | 07 e 08/12    | Apresentação final à banca                                   | ⚪              |
 
