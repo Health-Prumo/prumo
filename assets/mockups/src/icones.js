@@ -35,9 +35,9 @@ document.querySelectorAll('.medidor').forEach((el) => {
   el.innerHTML = `
     <svg width="${t}" height="${t}" viewBox="0 0 ${t} ${t}">
       <defs><linearGradient id="${id}" x1="0" y1="1" x2="1" y2="0">
-        <stop offset="0" stop-color="#8C6430"/><stop offset=".5" stop-color="#C9A15C"/><stop offset="1" stop-color="#F7D69E"/>
+        <stop offset="0" stop-color="#4FB38A"/><stop offset=".5" stop-color="#7FCFA8"/><stop offset="1" stop-color="#BFEBD4"/>
       </linearGradient></defs>
-      <circle cx="${t / 2}" cy="${t / 2}" r="${r}" fill="none" stroke="rgba(246,241,231,.08)" stroke-width="${espessura}"/>
+      <circle cx="${t / 2}" cy="${t / 2}" r="${r}" fill="none" stroke="rgba(246,241,231,.14)" stroke-width="${espessura}"/>
       <circle cx="${t / 2}" cy="${t / 2}" r="${r}" fill="none" stroke="url(#${id})" stroke-width="${espessura}"
         stroke-linecap="round" stroke-dasharray="${(c * valor) / 10} ${c}" transform="rotate(-90 ${t / 2} ${t / 2})"/>
     </svg>
@@ -59,23 +59,23 @@ document.querySelectorAll('.grafico-semana').forEach((el) => {
   const passo = iw / dias.length;
   const x = (i) => m.e + passo * i + passo / 2;
   let s = `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" font-family="Inter" font-size="11">`;
-  s += `<rect x="${m.e}" y="${y(9)}" width="${iw}" height="${y(7) - y(9)}" fill="rgba(127,184,154,.08)"/>`;
-  s += `<text x="${W - m.d - 4}" y="${y(9) + 13}" text-anchor="end" fill="rgba(127,184,154,.8)" font-size="10">faixa ideal de sono · 7 a 9 h</text>`;
+  s += `<rect x="${m.e}" y="${y(9)}" width="${iw}" height="${y(7) - y(9)}" fill="rgba(29,114,89,.08)"/>`;
+  s += `<text x="${W - m.d - 4}" y="${y(9) + 13}" text-anchor="end" fill="#1D7259" font-size="10" font-weight="600">faixa ideal de sono · 7 a 9 h</text>`;
   [0, 5, 10].forEach((v) => {
-    s += `<line x1="${m.e}" x2="${W - m.d}" y1="${y(v)}" y2="${y(v)}" stroke="rgba(246,241,231,.07)"/>`;
-    s += `<text x="${m.e - 10}" y="${y(v) + 4}" text-anchor="end" fill="rgba(246,241,231,.4)">${v}</text>`;
+    s += `<line x1="${m.e}" x2="${W - m.d}" y1="${y(v)}" y2="${y(v)}" stroke="#E3EAE6"/>`;
+    s += `<text x="${m.e - 10}" y="${y(v) + 4}" text-anchor="end" fill="#6E8078">${v}</text>`;
   });
   const bw = passo * 0.34;
   sono.forEach((v, i) => {
     const hoje = i === sono.length - 1;
-    s += `<rect x="${x(i) - bw / 2}" y="${y(v)}" width="${bw}" height="${y(0) - y(v)}" rx="${bw / 4}" fill="${hoje ? '#2E7A63' : '#1D5E4B'}"/>`;
-    s += `<text x="${x(i)}" y="${H - 6}" text-anchor="middle" fill="${hoje ? '#EBCB8F' : 'rgba(246,241,231,.45)'}" font-weight="${hoje ? 600 : 400}">${dias[i]}</text>`;
+    s += `<rect x="${x(i) - bw / 2}" y="${y(v)}" width="${bw}" height="${y(0) - y(v)}" rx="${bw / 4}" fill="${hoje ? '#145C48' : '#4E9E83'}"/>`;
+    s += `<text x="${x(i)}" y="${H - 6}" text-anchor="middle" fill="${hoje ? '#145C48' : '#6E8078'}" font-weight="${hoje ? 600 : 400}">${dias[i]}</text>`;
   });
   const pts = energia.map((v, i) => `${x(i)},${y(v)}`).join(' ');
-  s += `<polyline points="${pts}" fill="none" stroke="#C9A15C" stroke-width="2" stroke-linejoin="round"/>`;
+  s += `<polyline points="${pts}" fill="none" stroke="#46545A" stroke-width="2.4" stroke-linejoin="round"/>`;
   energia.forEach((v, i) => {
     const hoje = i === energia.length - 1;
-    s += `<circle cx="${x(i)}" cy="${y(v)}" r="${hoje ? 5 : 3}" fill="${hoje ? '#EBCB8F' : '#011C15'}" stroke="#C9A15C" stroke-width="2"/>`;
+    s += `<circle cx="${x(i)}" cy="${y(v)}" r="${hoje ? 5 : 3}" fill="${hoje ? '#46545A' : '#FFFFFF'}" stroke="#46545A" stroke-width="2"/>`;
   });
   el.innerHTML = s + '</svg>';
 });

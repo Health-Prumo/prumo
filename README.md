@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/brand/banner-prumo.svg" alt="Prumo — Saúde no rumo correto" width="100%">
+  <img src="assets/brand/banner-prumo-verde.svg" alt="Prumo — Saúde no rumo correto" width="100%">
 </p>
 
 <p align="center">
@@ -63,11 +63,11 @@ A decisão central é **separar o cálculo da explicação**: o código calcula 
 
 <img src="assets/brand/png/icone-app-512.png" alt="Ícone do Prumo" width="120" align="right">
 
-Ícone minimalista inspirado no **fio de prumo**, que representa **equilíbrio, alinhamento e direção**. Ele transmite foco, estabilidade e a ideia de estar no caminho correto. Ouro sobre verde-esmeralda profundo e tipografia serifada dão à marca um posicionamento de **alto nível**.
+Ícone minimalista inspirado no **fio de prumo**, que representa **equilíbrio, alinhamento e direção**. Ele transmite foco, estabilidade e a ideia de estar no caminho correto. A interface segue o padrão de produtos de saúde: **base branca**, **verde-esmeralda como contraste** e menta como destaque.
 
-<img src="assets/brand/paleta.svg" alt="Paleta de cores do Prumo" width="100%">
+<img src="assets/brand/png/paleta.png" alt="Paleta de cores do Prumo" width="100%">
 
-- **Cores:** Noite `#011C15`, Esmeralda `#0B392E`, Jade `#14503F`, Ouro `#C9A15C`, Ouro claro `#EBCB8F`, Marfim `#F6F1E7`
+- **Cores principais:** Esmeralda `#0B392E`, Verde 800 `#145C48`, Verde 700 `#1D7259`, Menta `#7FCFA8`, Fundo `#F4F7F5`, Branco `#FFFFFF`
 - **Tipografia:** Cormorant Garamond (logo e títulos) e Inter (texto e interface)
 
 → [Guia de identidade visual completo](docs/04-identidade-visual.md)
@@ -92,8 +92,9 @@ Os mockups são feitos em HTML e CSS, em [`assets/mockups/src/`](assets/mockups/
 .
 ├── README.md
 ├── assets/
-│   ├── brand/          # logo, símbolo, ícone do app e paleta (SVG)
-│   │   └── png/        # exportações em PNG e o ícone original
+│   ├── brand/          # logo, símbolo e ícone do app (SVG)
+│   │   ├── png/        # exportações em PNG, paleta e o ícone original
+│   │   └── src/        # fonte da paleta em HTML
 │   └── mockups/        # protótipo visual (PNG)
 │       └── src/        # fontes dos mockups em HTML e CSS
 └── docs/

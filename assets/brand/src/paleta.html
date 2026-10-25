@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Prumo — paleta de cores</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Inter:wght@400;500;600&display=swap">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { width: 1200px; padding: 40px; background: #FFFFFF; font-family: 'Inter', sans-serif; color: #0F2A23; -webkit-font-smoothing: antialiased; }
+  h2 { font-family: 'Cormorant Garamond', serif; font-weight: 500; font-size: 26px; color: #0B392E; margin: 0 0 14px; }
+  h2 small { font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 500; letter-spacing: .18em; text-transform: uppercase; color: #1D7259; margin-left: 12px; }
+  .grupo { margin-bottom: 30px; }
+  .linha { display: grid; gap: 12px; }
+  .c6 { grid-template-columns: repeat(6, 1fr); }
+  .c5 { grid-template-columns: repeat(5, 1fr); }
+  .c3 { grid-template-columns: repeat(3, 1fr); }
+  .cor { border: 1px solid #DCE5E0; border-radius: 14px; overflow: hidden; }
+  .amostra { height: 96px; }
+  .info { padding: 10px 12px 12px; }
+  .nome { font-weight: 600; font-size: 13px; }
+  .hex { font-size: 12px; color: #55665F; margin-top: 2px; font-variant-numeric: tabular-nums; }
+  .uso { font-size: 11px; color: #55665F; margin-top: 6px; line-height: 1.4; }
+</style>
+</head>
+<body>
+  <div class="grupo">
+    <h2>Marca <small>verdes e menta</small></h2>
+    <div class="linha c6">
+      <div class="cor"><div class="amostra" style="background:#011C15"></div><div class="info"><div class="nome">Noite</div><div class="hex">#011C15</div><div class="uso">Fundo do ícone e do banner</div></div></div>
+      <div class="cor"><div class="amostra" style="background:#0B392E"></div><div class="info"><div class="nome">Esmeralda</div><div class="hex">#0B392E</div><div class="uso">Cor da marca, títulos, card de destaque</div></div></div>
+      <div class="cor"><div class="amostra" style="background:#145C48"></div><div class="info"><div class="nome">Verde 800</div><div class="hex">#145C48</div><div class="uso">Botões principais, texto em destaque</div></div></div>
+      <div class="cor"><div class="amostra" style="background:#1D7259"></div><div class="info"><div class="nome">Verde 700</div><div class="hex">#1D7259</div><div class="uso">Ícones, seleção, rótulos</div></div></div>
+      <div class="cor"><div class="amostra" style="background:#7FCFA8"></div><div class="info"><div class="nome">Menta</div><div class="hex">#7FCFA8</div><div class="uso">Destaques sobre o esmeralda</div></div></div>
+      <div class="cor"><div class="amostra" style="background:#A8E0C4"></div><div class="info"><div class="nome">Menta claro</div><div class="hex">#A8E0C4</div><div class="uso">Números e texto sobre o esmeralda</div></div></div>
+    </div>
+  </div>
+
+  <div class="grupo">
+    <h2>Interface <small>base branca</small></h2>
+    <div class="linha c5">
+      <div class="cor"><div class="amostra" style="background:#FFFFFF;border-bottom:1px solid #DCE5E0"></div><div class="info"><div class="nome">Branco</div><div class="hex">#FFFFFF</div><div class="uso">Cards e superfícies</div></div></div>
+      <div class="cor"><div class="amostra" style="background:#F4F7F5"></div><div class="info"><div class="nome">Fundo</div><div class="hex">#F4F7F5</div><div class="uso">Fundo das telas</div></div></div>
+      <div class="cor"><div class="amostra" style="background:#E3F0EA"></div><div class="info"><div class="nome">Verde 100</div><div class="hex">#E3F0EA</div><div class="uso">Item ativo, fundo de ícones</div></div></div>
+      <div class="cor"><div class="amostra" style="background:#4E9E83"></div><div class="info"><div class="nome">Verde 500</div><div class="hex">#4E9E83</div><div class="uso">Barras dos gráficos</div></div></div>
+      <div class="cor"><div class="amostra" style="background:#0F2A23"></div><div class="info"><div class="nome">Texto</div><div class="hex">#0F2A23</div><div class="uso">Texto principal</div></div></div>
+    </div>
+  </div>
+
+  <div class="grupo" style="margin-bottom:0">
+    <h2>Apoio <small>dados e estados</small></h2>
+    <div class="linha c5">
+      <div class="cor"><div class="amostra" style="background:#46545A"></div><div class="info"><div class="nome">Grafite</div><div class="hex">#46545A</div><div class="uso">Segunda série nos gráficos</div></div></div>
+      <div class="cor"><div class="amostra" style="background:#55665F"></div><div class="info"><div class="nome">Texto suave</div><div class="hex">#55665F</div><div class="uso">Textos secundários</div></div></div>
+      <div class="cor"><div class="amostra" style="background:#1F7A55"></div><div class="info"><div class="nome">Positivo</div><div class="hex">#1F7A55</div><div class="uso">Meta atingida</div></div></div>
+      <div class="cor"><div class="amostra" style="background:#9A5B06"></div><div class="info"><div class="nome">Atenção</div><div class="hex">#9A5B06</div><div class="uso">Abaixo do padrão</div></div></div>
+      <div class="cor"><div class="amostra" style="background:#B42318"></div><div class="info"><div class="nome">Crítico</div><div class="hex">#B42318</div><div class="uso">Alertas e erros</div></div></div>
+    </div>
+  </div>
+</body>
+</html>

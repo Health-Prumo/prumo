@@ -1,18 +1,38 @@
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Inter:wght@400;500;600&display=swap');
 
 :root {
+  /* marca */
   --cor-noite: #011C15;
   --cor-esmeralda: #0B392E;
   --cor-jade: #14503F;
-  --cor-ouro: #C9A15C;
-  --cor-ouro-claro: #EBCB8F;
+  --cor-menta: #7FCFA8;         /* destaque sobre esmeralda: 5,9:1 */
+  --cor-menta-claro: #A8E0C4;   /* números e texto sobre esmeralda: 7,3:1 */
   --cor-marfim: #F6F1E7;
-  --degrade-ouro: linear-gradient(135deg, #8C6430 0%, #C9A15C 45%, #EBCB8F 80%, #F7D69E 100%);
-  --cor-positivo: #7FB89A;
-  --cor-atencao: #E0B25A;
-  --cor-critico: #D9826B;
-  --linha: rgba(201, 161, 92, .18);
-  --texto-suave: rgba(246, 241, 231, .62);
+  --cor-grafite: #46545A;       /* segunda série de dados nos gráficos */
+
+  /* interface: base branca, verde como contraste */
+  --fundo: #F4F7F5;
+  --superficie: #FFFFFF;
+  --borda: #DCE5E0;            /* bordas de cards (decorativas) */
+  --borda-controle: #788E84;   /* bordas de campos e opções: 3,5:1 sobre branco */
+  --texto: #0F2A23;
+  --texto-suave: #55665F;
+  --texto-apagado: #6E8078;
+  --sombra: 0 1px 2px rgba(15, 42, 35, .05), 0 8px 24px -12px rgba(15, 42, 35, .14);
+
+  /* escala de verdes da marca */
+  --verde-50: #F1F7F4;
+  --verde-100: #E3F0EA;
+  --verde-500: #4E9E83;        /* gráficos: 3,2:1 sobre branco */
+  --verde-700: #1D7259;        /* ícones, seleção, rótulos: 5,8:1 */
+  --verde-800: #145C48;        /* texto em destaque: 7,9:1 */
+  --degrade-verde: linear-gradient(90deg, #2F8A6C 0%, #145C48 100%);
+
+  /* estados (com texto sempre junto, nunca só a cor) */
+  --cor-positivo: #1F7A55;
+  --cor-atencao: #9A5B06;
+  --cor-critico: #B42318;
+
   --fonte-titulo: 'Cormorant Garamond', Georgia, serif;
   --fonte-texto: 'Inter', system-ui, sans-serif;
 }
@@ -21,27 +41,40 @@
 
 body {
   font-family: var(--fonte-texto);
-  color: var(--cor-marfim);
-  background: var(--cor-noite);
+  color: var(--texto);
+  background: var(--fundo);
   -webkit-font-smoothing: antialiased;
 }
 
-.titulo { font-family: var(--fonte-titulo); font-weight: 500; letter-spacing: .01em; font-variant-numeric: lining-nums; }
-.rotulo { font-size: 11px; font-weight: 500; letter-spacing: .2em; text-transform: uppercase; color: var(--cor-ouro); }
+.titulo { font-family: var(--fonte-titulo); font-weight: 500; letter-spacing: .01em; font-variant-numeric: lining-nums; color: var(--cor-esmeralda); }
+.rotulo { font-size: 11px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; color: var(--verde-700); }
 .suave { color: var(--texto-suave); }
-.ouro { color: var(--cor-ouro-claro); }
+.realce { color: var(--verde-800); font-weight: 600; }
 
 .card {
-  background: linear-gradient(180deg, rgba(20, 80, 63, .55), rgba(11, 57, 46, .55));
-  border: 1px solid var(--linha);
+  background: var(--superficie);
+  border: 1px solid var(--borda);
   border-radius: 16px;
+  box-shadow: var(--sombra);
 }
+
+/* card de destaque da marca, em esmeralda */
+.destaque {
+  color: var(--cor-marfim);
+  border: none;
+  background: radial-gradient(600px 300px at 15% 0%, #1A5C49 0%, #0F4536 45%, #0B392E 100%);
+  box-shadow: 0 18px 40px -20px rgba(11, 57, 46, .55);
+}
+.destaque .titulo { color: var(--cor-marfim); }
+.destaque .rotulo { color: var(--cor-menta); }
+.destaque .suave { color: rgba(246, 241, 231, .75); }
 
 .botao {
   display: inline-flex; align-items: center; gap: 8px;
-  background: var(--degrade-ouro); color: var(--cor-noite);
+  background: var(--verde-800); color: #FFFFFF;
   font-weight: 600; font-size: 14px; letter-spacing: .02em;
   border-radius: 999px; padding: 12px 22px;
+  box-shadow: 0 6px 14px -8px rgba(20, 92, 72, .5);
 }
 
 .selo { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 500; }
@@ -52,5 +85,5 @@ body {
 
 .icone { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
 
-.barra { height: 6px; border-radius: 99px; background: rgba(246, 241, 231, .08); overflow: hidden; }
-.barra > span { display: block; height: 100%; border-radius: 99px; background: var(--degrade-ouro); }
+.barra { height: 6px; border-radius: 99px; background: var(--verde-100); overflow: hidden; }
+.barra > span { display: block; height: 100%; border-radius: 99px; background: var(--degrade-verde); }
