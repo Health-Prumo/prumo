@@ -59,6 +59,14 @@ A decisão central é **separar o cálculo da explicação**: o código calcula 
 
 → [Proposta completa, regras de pontuação, justificativas e LGPD](docs/03-solucao.md)
 
+### Infraestrutura na AWS
+
+<img src="assets/arquitetura/arquitetura-aws.png" alt="Arquitetura do Prumo na AWS" width="100%">
+
+Arquitetura serverless em `us-east-1`, com a Lambda em subnets privadas de duas zonas de disponibilidade e acesso aos serviços da AWS por VPC endpoints, sem NAT Gateway. No cenário de teste (3 pessoas por 1 mês), o custo estimado é de **US$ 29,36 no mês**, coberto pelos créditos de conta nova.
+
+→ [Serviços, decisões, custos e estimativa no formato da AWS Pricing Calculator](docs/06-infraestrutura-aws.md)
+
 ## Identidade visual
 
 <img src="assets/brand/png/icone-app-512.png" alt="Ícone do Prumo" width="120" align="right">
@@ -95,14 +103,16 @@ Os mockups são feitos em HTML e CSS, em [`assets/mockups/src/`](assets/mockups/
 │   ├── brand/          # logo, símbolo e ícone do app (SVG)
 │   │   ├── png/        # exportações em PNG, paleta e o ícone original
 │   │   └── src/        # fonte da paleta em HTML
-│   └── mockups/        # protótipo visual (PNG)
-│       └── src/        # fontes dos mockups em HTML e CSS
+│   ├── mockups/        # protótipo visual (PNG)
+│   │   └── src/        # fontes dos mockups em HTML e CSS
+│   └── arquitetura/    # diagrama da arquitetura AWS (SVG e PNG)
 └── docs/
     ├── 01-problema.md
     ├── 02-bases-de-dados.md
     ├── 03-solucao.md
     ├── 04-identidade-visual.md
-    └── 05-pitch.md
+    ├── 05-pitch.md
+    └── 06-infraestrutura-aws.md
 ```
 
 ## Cronograma
