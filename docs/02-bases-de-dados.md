@@ -47,6 +47,8 @@ A OMS **não** publica uma meta diária de sono nem de água para adultos. Para 
 
 ## Pendências para o Checkpoint 2
 
+Para as explicações e sugestões do LLM, há uma [pesquisa inicial de fontes para o RAG](07-pesquisa-rag.md). A seleção é exploratória e não altera as metas nem substitui os indicadores populacionais abaixo.
+
 - [ ] Baixar os microdados ou tabelas do Vigitel mais recente e extrair os indicadores por sexo e faixa etária.
 - [ ] Baixar as tabelas da PNS 2019 no SIDRA para os mesmos indicadores.
 - [ ] Converter tudo num arquivo `data/referencias.json` versionado no repositório, com a fonte e o ano de cada número.

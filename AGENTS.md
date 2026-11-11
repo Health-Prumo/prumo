@@ -62,6 +62,7 @@ docs/
   04-identidade-visual.md       # logo, paleta, tipografia, contraste WCAG, tom de voz
   05-pitch.md                   # pitch
   06-infraestrutura-aws.md      # arquitetura AWS, custos oficiais, conta, Terraform, checklist
+  07-pesquisa-rag.md            # fontes candidatas, limites e proposta de curadoria para o RAG
 assets/
   brand/                        # logos e símbolo (SVG), png/ (exportações, paleta, avatar), src/paleta.html
   mockups/                      # desktop-hoje.png, mobile-telas.png; src/ = HTML/CSS dos mockups

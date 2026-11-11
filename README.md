@@ -41,6 +41,8 @@ Adultos sedentários sabem que precisam mudar de hábitos, mas não enxergam a p
 
 → [Detalhes, indicadores e links](docs/02-bases-de-dados.md)
 
+→ [Pesquisa inicial de fontes para o RAG](docs/07-pesquisa-rag.md) — artigos e guias candidatos para embasar explicações e sugestões; curadoria em avaliação.
+
 ## A solução
 
 ```
@@ -114,7 +116,8 @@ Os mockups são feitos em HTML e CSS, em [`assets/mockups/src/`](assets/mockups/
     ├── 03-solucao.md
     ├── 04-identidade-visual.md
     ├── 05-pitch.md
-    └── 06-infraestrutura-aws.md
+    ├── 06-infraestrutura-aws.md
+    └── 07-pesquisa-rag.md
 ```
 
 ## Cronograma
