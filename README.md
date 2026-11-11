@@ -99,6 +99,8 @@ Os mockups são feitos em HTML e CSS, em [`assets/mockups/src/`](assets/mockups/
 ```
 .
 ├── README.md
+├── AGENTS.md           # contexto do projeto para agentes de IA (Claude Code, Codex)
+├── CLAUDE.md           # importa o AGENTS.md
 ├── assets/
 │   ├── brand/          # logo, símbolo e ícone do app (SVG)
 │   │   ├── png/        # exportações em PNG, paleta e o ícone original

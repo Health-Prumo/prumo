@@ -12,7 +12,9 @@ Levantamento dos serviços da AWS para a primeira versão do Prumo, com custo es
 | **Custo do teste** (3 usuários por 1 mês) | **US$ 29,36 no mês**, coberto pelos créditos. **Custo real: zero.** |
 | **Maior custo** | Os VPC endpoints da rede privada (US$ 29,20 por mês). O uso do app em si custa centavos. |
 | **Créditos** | US$ 100 garantidos, mais até US$ 100 com atividades guiadas. Com US$ 200, cobrem os 6 meses do plano Free. |
-| **Plano da conta** | **Free**: nunca gera cobrança e dura até 6 meses, o que cobre todo o semestre. |
+| **Conta** | `health-prumo` (444331926746), criada em 11/11/2026, região `us-east-1` |
+| **Plano da conta** | **Free**: nunca gera cobrança e dura até 6 meses (até 11/05/2027), o que cobre todo o semestre. |
+| **Infraestrutura como código** | Terraform + Terragrunt em [tf-blueprint](https://github.com/Health-Prumo/tf-blueprint) e [tf-environments](https://github.com/Health-Prumo/tf-environments) |
 | **Modelo de IA** | **Amazon Nova Micro**. O Claude no Bedrock é cobrado pelo AWS Marketplace, que os créditos não cobrem. |
 
 ## Arquitetura
@@ -64,10 +66,20 @@ O API Gateway, o Cognito, o S3 e o CloudFront são serviços gerenciados que fic
 
 ### Infraestrutura como código
 
-Toda a infraestrutura será descrita em código com o **Terraform** (provider `hashicorp/aws`), versionado no repositório do back-end. Assim qualquer integrante recria o ambiente com `terraform apply`, e a banca vê exatamente o que existe na conta.
+Toda a infraestrutura é descrita em código com **Terraform** (provider `hashicorp/aws`) e **Terragrunt**, em dois repositórios. Assim qualquer integrante recria o ambiente, e a banca vê exatamente o que existe na conta.
 
-- **Estado remoto num bucket S3, com trava nativa (`use_lockfile = true`).** O estado do Terraform fica no S3 para que os três integrantes trabalhem sobre o mesmo ambiente. A trava nativa do S3 dispensa a tabela do DynamoDB que se usava antes, e o custo é de centavos.
-- **Bucket do estado criado uma única vez à parte** (pelo console ou por um diretório `bootstrap/` com estado local), com versionamento ligado. Ele não é gerenciado pelo mesmo código que ele guarda.
+| Repositório | Conteúdo |
+|---|---|
+| [Health-Prumo/tf-blueprint](https://github.com/Health-Prumo/tf-blueprint) | Módulos Terraform reutilizáveis, versionados por tag (`v0.1.0`). Cada módulo tem `versions.tf`, `variables.tf` com validações, `main.tf`, `outputs.tf` e `README.md`, e o GitHub Actions confere formatação e validação a cada push. |
+| [Health-Prumo/tf-environments](https://github.com/Health-Prumo/tf-environments) | Os ambientes em Terragrunt. Cada ambiente tem um `root.hcl` com o estado remoto e o provider, e cada pasta dentro dele aponta para um módulo do `tf-blueprint` por tag, nunca pela `main`. |
+
+**O que já está na conta (11/11/2026):** só os alertas de custo (`global/budgets`). Os módulos de rede, banco, login, front-end e API entram no `tf-blueprint` quando a infra for provisionada, num ambiente `dev/`.
+
+- **Estado remoto no bucket `prumo-terraform-state-444331926746`, com trava nativa (`use_lockfile = true`).** O estado fica no S3 para que os três integrantes trabalhem sobre o mesmo ambiente. A trava nativa do S3 dispensa a tabela do DynamoDB que se usava antes, e o custo é de centavos.
+- **Bucket do estado criado pelo próprio Terragrunt** na primeira execução (`terragrunt init --backend-bootstrap`), com versionamento, criptografia e acesso público bloqueado. Ele não é gerenciado pelo mesmo código que ele guarda.
+- **Proteção contra conta errada:** o provider tem `allowed_account_ids = ["444331926746"]`. Se outro perfil da AWS estiver ativo, o Terraform para antes de mudar qualquer coisa.
+- **Tags padrão** em todos os recursos: `Projeto`, `Ambiente`, `GerenciadoPor` e `Repositorio`.
+- **Nada sensível no repositório:** os e-mails dos alertas vêm da variável de ambiente `PRUMO_ALERT_EMAILS`.
 - **Código da Lambda empacotado pelo próprio Terraform** com `archive_file`. Assim um `terraform apply` publica a infraestrutura e o código juntos.
 - **Bucket do front-end com `force_destroy = true`.** Isso permite que o `terraform destroy` apague o bucket mesmo com arquivos dentro.
 
@@ -182,6 +194,8 @@ Desde julho de 2025, contas novas escolhem entre dois planos:
 
 O semestre termina em 08/12. Criando a conta agora, o plano Free cobre todo o projeto sem risco de cobrança. Se o projeto continuar depois, basta fazer upgrade para Paid antes dos 6 meses.
 
+**Cuidado: a conta sai do Free sozinha e não volta.** Ativar **AWS Organizations**, **IAM Identity Center** ou **Control Tower** converte a conta para Paid na hora, e o upgrade não tem volta. Foi o que aconteceu com a primeira conta do projeto: o Identity Center criou uma Organization, a conta virou Paid sem créditos, e ela foi fechada. Por isso a conta atual usa **usuários IAM** e o acesso pela CLI é pelo `aws login`, sem chaves de acesso fixas.
+
 ### Modelo de IA: Amazon Nova Micro
 
 - **Créditos:** os modelos da Anthropic (Claude) no Bedrock são cobrados pelo **AWS Marketplace**. Os termos dos créditos promocionais excluem cobranças do Marketplace, e há relatos de contas novas no plano Free recebendo erro de acesso a esses modelos.
@@ -197,7 +211,7 @@ O semestre termina em 08/12. Criando a conta agora, o plano Free cobre todo o pr
 - **AWS WAF e domínios no Route 53:** o endereço padrão do CloudFront (`*.cloudfront.net`) basta para a demonstração.
 
 **Proteções a configurar:**
-- **Budgets:** alertas em US$ 20 e US$ 40 por mês, com e-mail para o grupo. O custo esperado é de US$ 29,50.
+- **Budgets (já ativo):** orçamento `prumo-global-mensal` de US$ 40, com e-mail quando o gasto real passa de US$ 20 e de US$ 40, e quando a previsão do mês passa de US$ 40. O orçamento ignora os créditos (`include_credit = false`); sem isso, os créditos zeram o custo e nenhum alerta dispara. O custo esperado é de US$ 29,50.
 - **Limite de requisições no API Gateway:** por exemplo, 10 por segundo, para ninguém esgotar os créditos chamando a API em loop.
 - **Concorrência reservada da Lambda de IA:** por exemplo, 5 execuções simultâneas.
 - **Limite de tokens no Bedrock:** `maxTokens` de 400 na saída e o histórico do chat resumido, nunca enviado inteiro.
@@ -206,20 +220,22 @@ O semestre termina em 08/12. Criando a conta agora, o plano Free cobre todo o pr
 
 ## Primeiro dia na conta
 
-1. **Criar a conta:** plano **Free**, com o e-mail do projeto ou pessoal de um integrante (nunca de trabalho).
-2. **Proteger o acesso:**
-   - ativar MFA no usuário raiz e guardar as credenciais dele;
-   - criar usuários individuais para cada integrante no **IAM Identity Center** e não usar o raiz no dia a dia.
-3. **Criar os alertas do AWS Budgets** (US$ 20 e US$ 40 por mês).
-4. **Selecionar a região** `us-east-1` no console.
-5. **Liberar no Bedrock o acesso ao modelo** Amazon Nova Micro (Model access).
-6. **Criar o bucket do estado do Terraform,** com versionamento ligado, e configurar o backend S3 com `use_lockfile = true`.
-7. **Ganhar os créditos extras** fazendo as atividades guiadas do painel do Free Tier (até mais US$ 100).
+| | Passo | Status |
+|---|---|---|
+| 1 | **Criar a conta** no plano **Free**, com e-mail pessoal de um integrante (nunca de trabalho) | ✅ `health-prumo` (444331926746) |
+| 2 | **Proteger o acesso:** MFA no usuário raiz e **usuários IAM** individuais no grupo `admins`, sem usar o raiz no dia a dia. **Não usar o IAM Identity Center**, que converte a conta para Paid. | ✅ |
+| 3 | **Acesso pela CLI** com `aws login --profile prumo`, sem chave de acesso | ✅ |
+| 4 | **Criar os alertas do AWS Budgets** (US$ 20 e US$ 40 por mês), via `tf-environments/global/budgets` | ✅ |
+| 5 | **Criar o bucket do estado do Terraform**, com versionamento e `use_lockfile = true` | ✅ `prumo-terraform-state-444331926746` |
+| 6 | **Selecionar a região** `us-east-1` no console (ele abre em us-east-2) | ⬜ |
+| 7 | **Liberar no Bedrock o acesso ao modelo** Amazon Nova Micro, se o console pedir | ⬜ |
+| 8 | **Ganhar os créditos extras** com as atividades guiadas do painel do Free Tier (até mais US$ 100) | ⬜ |
 
 ## Referências
 
 - AWS Price List API, região us-east-1, publicação de 30/10/2026: https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/index.json
 - AWS Free Tier (documentação de faturamento): https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/free-tier.html
 - AWS Free Tier, perguntas frequentes: https://aws.amazon.com/free/free-tier-faqs/
+- Escolha do plano e o que converte a conta para Paid: https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/free-tier-plans.html
 - Preços da Amazon VPC (NAT Gateway): https://aws.amazon.com/vpc/pricing/
 - Lei Geral de Proteção de Dados (Lei 13.709/2018), art. 33: https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm
