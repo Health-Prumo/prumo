@@ -70,16 +70,16 @@ Toda a infraestrutura é descrita em código com **Terraform** (provider `hashic
 
 | Repositório | Conteúdo |
 |---|---|
-| [Health-Prumo/tf-blueprint](https://github.com/Health-Prumo/tf-blueprint) | Módulos Terraform reutilizáveis, versionados por tag (`v0.1.0`). Cada módulo tem `versions.tf`, `variables.tf` com validações, `main.tf`, `outputs.tf` e `README.md`, e o GitHub Actions confere formatação e validação a cada push. |
+| [Health-Prumo/tf-blueprint](https://github.com/Health-Prumo/tf-blueprint) | Módulos Terraform reutilizáveis, versionados por tag (hoje `v0.2.0`). Cada módulo tem `versions.tf`, `variables.tf` com validações, `main.tf`, `outputs.tf` e `README.md`, e o GitHub Actions confere formatação e validação a cada push. |
 | [Health-Prumo/tf-environments](https://github.com/Health-Prumo/tf-environments) | Os ambientes em Terragrunt. Cada ambiente tem um `root.hcl` com o estado remoto e o provider, e cada pasta dentro dele aponta para um módulo do `tf-blueprint` por tag, nunca pela `main`. |
 
-**O que já está na conta (11/11/2026):** só os alertas de custo (`global/budgets`). Os módulos de rede, banco, login, front-end e API entram no `tf-blueprint` quando a infra for provisionada, num ambiente `dev/`.
+**O que já está na conta (11/11/2026):** só as proteções de custo: o orçamento com alertas (`global/budgets`) e a detecção de anomalias (`global/cost-anomaly`). Os módulos de rede, banco, login, front-end e API entram no `tf-blueprint` quando a infra for provisionada, num ambiente `dev/`.
 
 - **Estado remoto no bucket `prumo-terraform-state-444331926746`, com trava nativa (`use_lockfile = true`).** O estado fica no S3 para que os três integrantes trabalhem sobre o mesmo ambiente. A trava nativa do S3 dispensa a tabela do DynamoDB que se usava antes, e o custo é de centavos.
 - **Bucket do estado criado pelo próprio Terragrunt** na primeira execução (`terragrunt init --backend-bootstrap`), com versionamento, criptografia e acesso público bloqueado. Ele não é gerenciado pelo mesmo código que ele guarda.
 - **Proteção contra conta errada:** o provider tem `allowed_account_ids = ["444331926746"]`. Se outro perfil da AWS estiver ativo, o Terraform para antes de mudar qualquer coisa.
 - **Tags padrão** em todos os recursos: `Projeto`, `Ambiente`, `GerenciadoPor` e `Repositorio`.
-- **Nada sensível no repositório:** os e-mails dos alertas vêm da variável de ambiente `PRUMO_ALERT_EMAILS`.
+- **Nada sensível no repositório:** os e-mails dos alertas vêm das variáveis de ambiente `PRUMO_ALERT_EMAILS` e `PRUMO_ANOMALY_EMAILS`.
 - **Código da Lambda empacotado pelo próprio Terraform** com `archive_file`. Assim um `terraform apply` publica a infraestrutura e o código juntos.
 - **Bucket do front-end com `force_destroy = true`.** Isso permite que o `terraform destroy` apague o bucket mesmo com arquivos dentro.
 
@@ -212,6 +212,7 @@ O semestre termina em 08/12. Criando a conta agora, o plano Free cobre todo o pr
 
 **Proteções a configurar:**
 - **Budgets (já ativo):** orçamento `prumo-global-mensal` de US$ 40, com e-mail quando o gasto real passa de US$ 20 e de US$ 40, e quando a previsão do mês passa de US$ 40. O orçamento ignora os créditos (`include_credit = false`); sem isso, os créditos zeram o custo e nenhum alerta dispara. O custo esperado é de US$ 29,50.
+- **Detecção de anomalias (já ativa, gratuita):** o Cost Anomaly Detection aprende o padrão de gasto de cada serviço e manda um resumo diário por e-mail quando uma anomalia passa de US$ 5. Pega um recurso esquecido ligado antes de o total do mês chegar aos alertas do Budgets. O padrão da AWS (US$ 100 e 40%) nunca dispararia num projeto deste tamanho.
 - **Limite de requisições no API Gateway:** por exemplo, 10 por segundo, para ninguém esgotar os créditos chamando a API em loop.
 - **Concorrência reservada da Lambda de IA:** por exemplo, 5 execuções simultâneas.
 - **Limite de tokens no Bedrock:** `maxTokens` de 400 na saída e o histórico do chat resumido, nunca enviado inteiro.
@@ -226,6 +227,7 @@ O semestre termina em 08/12. Criando a conta agora, o plano Free cobre todo o pr
 | 2 | **Proteger o acesso:** MFA no usuário raiz e **usuários IAM** individuais no grupo `admins`, sem usar o raiz no dia a dia. **Não usar o IAM Identity Center**, que converte a conta para Paid. | ✅ |
 | 3 | **Acesso pela CLI** com `aws login --profile prumo`, sem chave de acesso | ✅ |
 | 4 | **Criar os alertas do AWS Budgets** (US$ 20 e US$ 40 por mês), via `tf-environments/global/budgets` | ✅ |
+| 4b | **Ajustar o Cost Anomaly Detection** para US$ 5, via `tf-environments/global/cost-anomaly` | ✅ |
 | 5 | **Criar o bucket do estado do Terraform**, com versionamento e `use_lockfile = true` | ✅ `prumo-terraform-state-444331926746` |
 | 6 | **Selecionar a região** `us-east-1` no console (ele abre em us-east-2) | ⬜ |
 | 7 | **Liberar no Bedrock o acesso ao modelo** Amazon Nova Micro, se o console pedir | ⬜ |

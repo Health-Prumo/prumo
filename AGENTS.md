@@ -45,8 +45,8 @@ Todos são **públicos**. Nunca coloque segredo, chave, senha ou e-mail pessoal 
 |---|---|
 | [`prumo`](https://github.com/Health-Prumo/prumo) (este) | Repositório central: proposta, docs, identidade visual, mockups, arquitetura |
 | [`.github`](https://github.com/Health-Prumo/.github) | `profile/README.md` = página de apresentação da organização |
-| [`tf-blueprint`](https://github.com/Health-Prumo/tf-blueprint) | Módulos Terraform reutilizáveis, versionados por tag (hoje `v0.1.0`, só `budgets`) |
-| [`tf-environments`](https://github.com/Health-Prumo/tf-environments) | Ambientes em Terragrunt que consomem o `tf-blueprint` (hoje só `global/budgets`) |
+| [`tf-blueprint`](https://github.com/Health-Prumo/tf-blueprint) | Módulos Terraform reutilizáveis, versionados por tag (hoje `v0.2.0`: `budgets` e `cost-anomaly`) |
+| [`tf-environments`](https://github.com/Health-Prumo/tf-environments) | Ambientes em Terragrunt que consomem o `tf-blueprint` (hoje `global/budgets` e `global/cost-anomaly`) |
 | `prumo-web` / `prumo-api` | **Ainda não existem.** Front-end e back-end previstos para o Checkpoint 2 |
 
 ### Estrutura deste repositório
@@ -92,6 +92,7 @@ assets/
 | Região | **`us-east-1` para tudo** |
 | Acesso | Usuários **IAM** individuais (grupo `admins`). CLI por `aws login --profile prumo`, **sem access keys** |
 | Orçamento | `prumo-global-mensal`: US$ 40/mês, e-mail em US$ 20 e US$ 40 de gasto real e na previsão de passar de US$ 40 |
+| Anomalias de custo | Monitor `prumo-global-servicos` e assinatura `prumo-global-anomalias`: resumo diário por e-mail quando uma anomalia passa de US$ 5 |
 
 ### Regras que não podem ser quebradas
 
@@ -121,7 +122,7 @@ Diagrama: [`assets/arquitetura/arquitetura-aws.png`](assets/arquitetura/arquitet
   - provider gerado com `allowed_account_ids = ["444331926746"]` e tags padrão (`Projeto`, `Ambiente`, `GerenciadoPor`, `Repositorio`);
   - `inputs` comuns `basename`, `environment` e `region`.
 - Cada unidade aponta para um módulo **por tag** (`git::https://github.com/Health-Prumo/tf-blueprint.git//<modulo>?ref=vX.Y.Z`), nunca pela `main`. Mudou um módulo: nova tag no `tf-blueprint`, depois atualize o `?ref=`.
-- Dados sensíveis vêm de variáveis de ambiente. Os e-mails dos alertas vêm de `PRUMO_ALERT_EMAILS` (separados por vírgula); sem ela, o Terragrunt para com erro.
+- Dados sensíveis vêm de variáveis de ambiente. Os e-mails dos alertas vêm de `PRUMO_ALERT_EMAILS` (`budgets`) e `PRUMO_ANOMALY_EMAILS` (`cost-anomaly`), separados por vírgula; sem elas, o Terragrunt para com erro.
 - Fluxo: `export AWS_PROFILE=prumo`, `terragrunt plan`, revisar, `terragrunt apply`. Mostre o plan antes de aplicar.
 
 ## 6. Identidade visual
