@@ -101,6 +101,7 @@ assets/
 - **Confira a conta antes de qualquer comando que crie ou altere algo:** `aws sts get-caller-identity --profile prumo` tem que retornar `444331926746`. Integrantes podem ter outros perfis da AWS configurados na máquina; nunca use um perfil que não seja o do Prumo.
 - **Não crie recursos que cobram por hora** sem combinar com o grupo: NAT Gateway, RDS/Aurora, EC2, IPv4 público parado, WAF, domínio no Route 53. Os interface endpoints da VPC (cerca de US$ 29,20/mês) estão previstos no desenho e devem ser ligados só na janela de teste.
 - **Toda mudança de infraestrutura passa pelo Terraform/Terragrunt**, nunca pelo console.
+- **Todo recurso leva a tag `ze = porvux`** (chave `ze`, valor `porvux`). No Terraform ela vem do `default_tags` do `root.hcl`. Se algo for criado pelo console ou pela CLI (usuários IAM, por exemplo), aplique a tag na criação. Confira com `aws resourcegroupstaggingapi get-resources --tag-filters Key=ze,Values=porvux`.
 
 ### Arquitetura planejada
 
@@ -120,7 +121,7 @@ Diagrama: [`assets/arquitetura/arquitetura-aws.png`](assets/arquitetura/arquitet
 - **`tf-blueprint`:** um diretório por módulo com `versions.tf`, `variables.tf` (descrição, tipo e `validation`), `locals.tf`, `main.tf`, `outputs.tf` e `README.md`. Todo módulo recebe `basename`, `environment` e `tags`. Nomes no padrão `<basename>-<environment>-<recurso>`. O provider não é declarado nos módulos. O GitHub Actions roda `terraform fmt -check` e `validate`.
 - **`tf-environments`:** um `root.hcl` por ambiente (`global/`, depois `dev/`), com:
   - estado no S3 `prumo-terraform-state-444331926746` com `use_lockfile = true`;
-  - provider gerado com `allowed_account_ids = ["444331926746"]` e tags padrão (`Projeto`, `Ambiente`, `GerenciadoPor`, `Repositorio`);
+  - provider gerado com `allowed_account_ids = ["444331926746"]` e tags padrão (`ze = porvux`, `Projeto`, `Ambiente`, `GerenciadoPor`, `Repositorio`);
   - `inputs` comuns `basename`, `environment` e `region`.
 - Cada unidade aponta para um módulo **por tag** (`git::https://github.com/Health-Prumo/tf-blueprint.git//<modulo>?ref=vX.Y.Z`), nunca pela `main`. Mudou um módulo: nova tag no `tf-blueprint`, depois atualize o `?ref=`.
 - Dados sensíveis vêm de variáveis de ambiente. Os e-mails dos alertas vêm de `PRUMO_ALERT_EMAILS` (`budgets`) e `PRUMO_ANOMALY_EMAILS` (`cost-anomaly`), separados por vírgula; sem elas, o Terragrunt para com erro.

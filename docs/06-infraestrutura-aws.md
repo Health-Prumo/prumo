@@ -78,7 +78,7 @@ Toda a infraestrutura é descrita em código com **Terraform** (provider `hashic
 - **Estado remoto no bucket `prumo-terraform-state-444331926746`, com trava nativa (`use_lockfile = true`).** O estado fica no S3 para que os três integrantes trabalhem sobre o mesmo ambiente. A trava nativa do S3 dispensa a tabela do DynamoDB que se usava antes, e o custo é de centavos.
 - **Bucket do estado criado pelo próprio Terragrunt** na primeira execução (`terragrunt init --backend-bootstrap`), com versionamento, criptografia e acesso público bloqueado. Ele não é gerenciado pelo mesmo código que ele guarda.
 - **Proteção contra conta errada:** o provider tem `allowed_account_ids = ["444331926746"]`. Se outro perfil da AWS estiver ativo, o Terraform para antes de mudar qualquer coisa.
-- **Tags padrão** em todos os recursos: `Projeto`, `Ambiente`, `GerenciadoPor` e `Repositorio`.
+- **Tags padrão** em todos os recursos: `ze = porvux`, `Projeto`, `Ambiente`, `GerenciadoPor` e `Repositorio`. A tag `ze = porvux` é obrigatória também no que for criado pelo console, como os usuários IAM e o bucket do estado.
 - **Nada sensível no repositório:** os e-mails dos alertas vêm das variáveis de ambiente `PRUMO_ALERT_EMAILS` e `PRUMO_ANOMALY_EMAILS`.
 - **Código da Lambda empacotado pelo próprio Terraform** com `archive_file`. Assim um `terraform apply` publica a infraestrutura e o código juntos.
 - **Bucket do front-end com `force_destroy = true`.** Isso permite que o `terraform destroy` apague o bucket mesmo com arquivos dentro.
