@@ -47,7 +47,8 @@ Todos são **públicos**. Nunca coloque segredo, chave, senha ou e-mail pessoal 
 | [`.github`](https://github.com/Health-Prumo/.github) | `profile/README.md` = página de apresentação da organização |
 | [`tf-blueprint`](https://github.com/Health-Prumo/tf-blueprint) | Módulos Terraform reutilizáveis, versionados por tag (hoje `v0.2.0`: `budgets` e `cost-anomaly`) |
 | [`tf-environments`](https://github.com/Health-Prumo/tf-environments) | Ambientes em Terragrunt que consomem o `tf-blueprint` (hoje `global/budgets` e `global/cost-anomaly`) |
-| `prumo-web` / `prumo-api` | **Ainda não existem.** Front-end e back-end previstos para o Checkpoint 2 |
+| [`prumo-web`](https://github.com/Health-Prumo/prumo-web) | Front-end (React + TypeScript, Vite). **Ainda sem código**: tem só o próprio `AGENTS.md` com a stack e as regras do front |
+| [`prumo-api`](https://github.com/Health-Prumo/prumo-api) | API (Python, Lambda, DynamoDB, Bedrock). **Ainda sem código**: tem só o próprio `AGENTS.md` com a stack e as regras da API |
 
 ### Estrutura deste repositório
 
@@ -174,6 +175,6 @@ Guia completo em [`docs/04-identidade-visual.md`](docs/04-identidade-visual.md).
 
 - Definir o público final (adultos sedentários ou universitários).
 - Definir professor mentor e licença.
-- Checkpoint 2: criar `prumo-web` e `prumo-api`, calibrar os pesos da nota de energia, gerar `data/referencias.json` a partir das bases (ver "Pendências" em `docs/02-bases-de-dados.md`).
+- Checkpoint 2: montar o código do `prumo-web` e do `prumo-api`, calibrar os pesos da nota de energia, gerar `data/referencias.json` a partir das bases (ver "Pendências" em `docs/02-bases-de-dados.md`).
 - Infra: criar no `tf-blueprint` os módulos de rede, dados, login, front-end e API, e o ambiente `dev/` no `tf-environments`.
 - Conta AWS: liberar o Nova Micro no Bedrock se o console pedir e fazer as atividades guiadas para ganhar até mais US$ 100 de créditos.
