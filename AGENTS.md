@@ -176,5 +176,14 @@ Guia completo em [`docs/04-identidade-visual.md`](docs/04-identidade-visual.md).
 - Definir o público final (adultos sedentários ou universitários).
 - Definir professor mentor e licença.
 - Checkpoint 2: montar o código do `prumo-web` e do `prumo-api`, calibrar os pesos da nota de energia, gerar `data/referencias.json` a partir das bases (ver "Pendências" em `docs/02-bases-de-dados.md`).
+- Qualidade e segurança: configurar junto com o esqueleto do `prumo-api` e do `prumo-web`, no mesmo PR:
+
+| Onde | Ferramentas |
+|---|---|
+| `prumo-api` | `ruff` (lint e formatação), `mypy` (tipos), `pytest` (foco nas regras de pontuação), `bandit` (segurança) |
+| `prumo-web` | TypeScript `strict`, ESLint e Prettier, Vitest |
+| Todos os repositórios | `gitleaks` no pre-commit e no GitHub Actions (repositórios públicos), Dependabot, CodeQL |
+| `tf-blueprint` e `tf-environments` | `tflint` e `checkov` no GitHub Actions, além do `fmt -check` e `validate` que já existem |
+
 - Infra: criar no `tf-blueprint` os módulos de rede, dados, login, front-end e API, e o ambiente `dev/` no `tf-environments`.
 - Conta AWS: liberar o Nova Micro no Bedrock se o console pedir e fazer as atividades guiadas para ganhar até mais US$ 100 de créditos.
