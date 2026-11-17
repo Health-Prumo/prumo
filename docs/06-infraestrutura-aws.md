@@ -24,7 +24,7 @@ Levantamento dos serviços da AWS para a primeira versão do Prumo, com custo es
 <sub>Ícones oficiais do pacote AWS Architecture Icons. Versão vetorial: [`assets/arquitetura/arquitetura-aws.svg`](../assets/arquitetura/arquitetura-aws.svg).</sub>
 
 O fluxo principal (registrar o dia e receber a análise), numerado no diagrama, passa por:
-1. **CloudFront e S3:** entregam o site.
+1. **CloudFront e S3:** entregam o site. Antes, o navegador consulta o **Route 53**, que resolve o domínio `healthprumo.online`.
 2. **Cognito:** faz o login e emite um token.
 3. **API Gateway:** recebe a chamada do app e confere o token no Cognito.
 4. **Lambda:** roda dentro das subnets privadas da VPC, nas duas zonas de disponibilidade.
@@ -60,6 +60,7 @@ O API Gateway, o Cognito, o S3 e o CloudFront são serviços gerenciados que fic
 | **Amazon Bedrock** | Gera o card "Seu dia" e as respostas do Coach | IA gerenciada, sem chave de API para guardar (acesso por permissão da Lambda) | **Não tem.** É o principal custo. |
 | **EventBridge Scheduler** | Lembrete diário para registrar o dia | Agendamento sem servidor | 14 milhões de invocações |
 | **CloudWatch Logs** | Logs da Lambda e da API para depuração | Já integrado à Lambda | 5 GB |
+| **Amazon Route 53** | DNS do domínio `healthprumo.online` (registrado na GoDaddy, com o DNS delegado à AWS) | Todos os registros no mesmo lugar e em Terraform; integra com CloudFront e ACM | Não tem: US$ 0,50 por zona por mês, mais US$ 0,40 por milhão de consultas |
 | **AWS Budgets** | Alertas por e-mail se o gasto passar de um limite | Proteção contra surpresas na fatura | Gratuito |
 | **IAM** | Permissões mínimas para cada função | Obrigatório e gratuito | Gratuito |
 | **Amazon VPC** | Rede privada da Lambda, com subnets em duas zonas | Isola o backend da internet | A VPC e o gateway endpoint são gratuitos; os interface endpoints, não |
@@ -70,10 +71,10 @@ Toda a infraestrutura é descrita em código com **Terraform** (provider `hashic
 
 | Repositório | Conteúdo |
 |---|---|
-| [Health-Prumo/tf-blueprint](https://github.com/Health-Prumo/tf-blueprint) | Módulos Terraform reutilizáveis, versionados por tag (hoje `v0.2.0`). Cada módulo tem `versions.tf`, `variables.tf` com validações, `main.tf`, `outputs.tf` e `README.md`, e o GitHub Actions confere formatação e validação a cada push. |
+| [Health-Prumo/tf-blueprint](https://github.com/Health-Prumo/tf-blueprint) | Módulos Terraform reutilizáveis, versionados por tag (hoje `v0.3.0`). Cada módulo tem `versions.tf`, `variables.tf` com validações, `main.tf`, `outputs.tf` e `README.md`, e o GitHub Actions confere formatação e validação a cada push. |
 | [Health-Prumo/tf-environments](https://github.com/Health-Prumo/tf-environments) | Os ambientes em Terragrunt. Cada ambiente tem um `root.hcl` com o estado remoto e o provider, e cada pasta dentro dele aponta para um módulo do `tf-blueprint` por tag, nunca pela `main`. |
 
-**O que já está na conta (11/11/2026):** só as proteções de custo: o orçamento com alertas (`global/budgets`) e a detecção de anomalias (`global/cost-anomaly`). Os módulos de rede, banco, login, front-end e API entram no `tf-blueprint` quando a infra for provisionada, num ambiente `dev/`.
+**O que já está na conta (17/11/2026):** as proteções de custo, com o orçamento com alertas (`global/budgets`) e a detecção de anomalias (`global/cost-anomaly`), e a zona DNS do `healthprumo.online` (`global/dns`). Os módulos de rede, banco, login, front-end e API entram no `tf-blueprint` quando a infra for provisionada, num ambiente `dev/`.
 
 - **Estado remoto no bucket `prumo-terraform-state-444331926746`, com trava nativa (`use_lockfile = true`).** O estado fica no S3 para que os três integrantes trabalhem sobre o mesmo ambiente. A trava nativa do S3 dispensa a tabela do DynamoDB que se usava antes, e o custo é de centavos.
 - **Bucket do estado criado pelo próprio Terragrunt** na primeira execução (`terragrunt init --backend-bootstrap`), com versionamento, criptografia e acesso público bloqueado. Ele não é gerenciado pelo mesmo código que ele guarda.
@@ -110,6 +111,8 @@ Cenário: **3 pessoas testando o app por 1 mês**, com uso intenso, e depois a i
 | Amazon Bedrock | US East (N. Virginia) | 0,00 USD | 0,14 USD | 1,73 USD | Amazon Nova Micro sob demanda; 2,66 milhões de tokens de entrada e 0,36 milhão de saída/mês |
 | Amazon VPC | US East (N. Virginia) | 0,00 USD | 29,20 USD | 350,40 USD | 4 interface endpoints (Bedrock Runtime e CloudWatch Logs em 2 zonas), 730 horas/mês; 0,01 GB processados; 1 gateway endpoint do DynamoDB (gratuito) |
 | **Total** | | **0,00 USD** | **29,36 USD** | **352,26 USD** | |
+
+Fora da estimativa: a zona DNS do Route 53 (US$ 0,50 por mês), que fica ligada o semestre inteiro e não é apagada depois do teste.
 
 - **Duração média da Lambda (740 ms):** média ponderada entre chamadas comuns (150 ms) e chamadas que esperam a IA (3 s).
 - **Custo em 12 meses:** é o formato padrão da AWS Pricing Calculator. Como o teste dura 1 mês e depois tudo é apagado, o custo real é o de um mês (**US$ 29,36**), pago pelos créditos.
@@ -208,7 +211,8 @@ O semestre termina em 08/12. Criando a conta agora, o plano Free cobre todo o pr
 - **NAT Gateway:** US$ 0,045 por hora (cerca de US$ 33 por mês) mais US$ 0,045 por GB. Os VPC endpoints substituem o NAT.
 - **RDS, Aurora e instâncias EC2:** o DynamoDB substitui o banco relacional.
 - **Endereços IP públicos (IPv4) parados.**
-- **AWS WAF e domínios no Route 53:** o endereço padrão do CloudFront (`*.cloudfront.net`) basta para a demonstração.
+- **AWS WAF:** não é necessário para a demonstração.
+- **Registro de domínio pela AWS:** o `healthprumo.online` foi comprado na GoDaddy e continua registrado lá. No Route 53 fica só a zona DNS (US$ 0,50 por mês). Não registre nem transfira domínio pela AWS.
 
 **Proteções a configurar:**
 - **Budgets (já ativo):** orçamento `prumo-global-mensal` de US$ 40, com e-mail quando o gasto real passa de US$ 20 e de US$ 40, e quando a previsão do mês passa de US$ 40. O orçamento ignora os créditos (`include_credit = false`); sem isso, os créditos zeram o custo e nenhum alerta dispara. O custo esperado é de US$ 29,50.
@@ -232,6 +236,7 @@ O semestre termina em 08/12. Criando a conta agora, o plano Free cobre todo o pr
 | 6 | **Selecionar a região** `us-east-1` no console (ele abre em us-east-2) | ⬜ |
 | 7 | **Liberar no Bedrock o acesso ao modelo** Amazon Nova Micro, se o console pedir | ⬜ |
 | 8 | **Ganhar os créditos extras** com as atividades guiadas do painel do Free Tier (até mais US$ 100) | ⬜ |
+| 9 | **Delegar o DNS do `healthprumo.online`:** zona no Route 53 via `tf-environments/global/dns` e troca dos nameservers na GoDaddy | ✅ zona criada · ⬜ nameservers na GoDaddy |
 
 ## Referências
 

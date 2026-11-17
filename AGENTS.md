@@ -45,8 +45,8 @@ Todos são **públicos**. Nunca coloque segredo, chave, senha ou e-mail pessoal 
 |---|---|
 | [`prumo`](https://github.com/Health-Prumo/prumo) (este) | Repositório central: proposta, docs, identidade visual, mockups, arquitetura |
 | [`.github`](https://github.com/Health-Prumo/.github) | `profile/README.md` = página de apresentação da organização |
-| [`tf-blueprint`](https://github.com/Health-Prumo/tf-blueprint) | Módulos Terraform reutilizáveis, versionados por tag (hoje `v0.2.0`: `budgets` e `cost-anomaly`) |
-| [`tf-environments`](https://github.com/Health-Prumo/tf-environments) | Ambientes em Terragrunt que consomem o `tf-blueprint` (hoje `global/budgets` e `global/cost-anomaly`) |
+| [`tf-blueprint`](https://github.com/Health-Prumo/tf-blueprint) | Módulos Terraform reutilizáveis, versionados por tag (hoje `v0.3.0`: `budgets`, `cost-anomaly` e `dns-zone`) |
+| [`tf-environments`](https://github.com/Health-Prumo/tf-environments) | Ambientes em Terragrunt que consomem o `tf-blueprint` (hoje `global/budgets`, `global/cost-anomaly` e `global/dns`) |
 | [`prumo-web`](https://github.com/Health-Prumo/prumo-web) | Front-end (React + TypeScript, Vite). **Ainda sem código**: tem só o próprio `AGENTS.md` com a stack e as regras do front |
 | [`prumo-api`](https://github.com/Health-Prumo/prumo-api) | API (Python, Lambda, DynamoDB, Bedrock). **Ainda sem código**: tem só o próprio `AGENTS.md` com a stack e as regras da API |
 
@@ -95,12 +95,13 @@ assets/
 | Acesso | Usuários **IAM** individuais (grupo `admins`). CLI por `aws login --profile prumo`, **sem access keys** |
 | Orçamento | `prumo-global-mensal`: US$ 40/mês, e-mail em US$ 20 e US$ 40 de gasto real e na previsão de passar de US$ 40 |
 | Anomalias de custo | Monitor `prumo-global-servicos` e assinatura `prumo-global-anomalias`: resumo diário por e-mail quando uma anomalia passa de US$ 5 |
+| Domínio | `healthprumo.online`, registrado na GoDaddy. O DNS é delegado à zona do Route 53 (`global/dns`); todo registro DNS é criado por lá, via Terraform. SPF, DMARC e MX nulo bloqueiam e-mail falso em nome do domínio |
 
 ### Regras que não podem ser quebradas
 
 - **Nunca ative AWS Organizations, IAM Identity Center (SSO) nem Control Tower.** Qualquer um deles converte a conta para o plano pago, sem volta. Isso já aconteceu com a primeira conta do projeto, que teve de ser fechada.
 - **Confira a conta antes de qualquer comando que crie ou altere algo:** `aws sts get-caller-identity --profile prumo` tem que retornar `444331926746`. Integrantes podem ter outros perfis da AWS configurados na máquina; nunca use um perfil que não seja o do Prumo.
-- **Não crie recursos que cobram por hora** sem combinar com o grupo: NAT Gateway, RDS/Aurora, EC2, IPv4 público parado, WAF, domínio no Route 53. Os interface endpoints da VPC (cerca de US$ 29,20/mês) estão previstos no desenho e devem ser ligados só na janela de teste.
+- **Não crie recursos que cobram por hora** sem combinar com o grupo: NAT Gateway, RDS/Aurora, EC2, IPv4 público parado, WAF, registro ou transferência de domínio pela AWS. Os interface endpoints da VPC (cerca de US$ 29,20/mês) estão previstos no desenho e devem ser ligados só na janela de teste.
 - **Toda mudança de infraestrutura passa pelo Terraform/Terragrunt**, nunca pelo console.
 - **Todo recurso leva a tag `ze = porvux`** (chave `ze`, valor `porvux`). No Terraform ela vem do `default_tags` do `root.hcl`. Se algo for criado pelo console ou pela CLI (usuários IAM, por exemplo), aplique a tag na criação. Confira com `aws resourcegroupstaggingapi get-resources --tag-filters Key=ze,Values=porvux`.
 
@@ -108,6 +109,7 @@ assets/
 
 Diagrama: [`assets/arquitetura/arquitetura-aws.png`](assets/arquitetura/arquitetura-aws.png). Detalhes, preços oficiais e estimativa: [`docs/06-infraestrutura-aws.md`](docs/06-infraestrutura-aws.md).
 
+- **DNS:** Route 53 com a zona `healthprumo.online` (domínio registrado na GoDaddy, DNS delegado).
 - **Front-end:** CloudFront + S3 privado (Origin Access Control).
 - **Login:** Cognito; o API Gateway valida o JWT.
 - **API:** API Gateway HTTP API → Lambda (Python, arm64) em **subnets privadas de 2 AZs**.
@@ -170,6 +172,7 @@ Guia completo em [`docs/04-identidade-visual.md`](docs/04-identidade-visual.md).
 - **Não commite:** segredos, `.terraform/`, `.terragrunt-cache/`, `*.tfstate`, planos do Terraform, nem arquivos gerados que não sejam entregáveis.
 - **Fora do repositório, de propósito:** a calculadora interativa de custos e o script Python que gera o diagrama de arquitetura (`arquitetura_prumo.py`, que usa ferramentas que não são do projeto). Se o diagrama mudar, ele é regenerado fora daqui e só o SVG/PNG entra em `assets/arquitetura/`. O diagrama não menciona o plano Free.
 - **Ao mudar algo relevante** (conta, repositórios, decisões, cronograma), atualize este arquivo, o `README.md` e o doc correspondente em `docs/`.
+- **Serviço novo da AWS:** sobe pelo Terraform já com as tags padrão do `root.hcl` (`ze = porvux` e as demais), e no mesmo trabalho entram no desenho (`assets/arquitetura/`, regenerado fora do repositório) e no `docs/06-infraestrutura-aws.md` (fluxo, tabela de serviços e custo).
 
 ## 9. Pendências conhecidas
 
