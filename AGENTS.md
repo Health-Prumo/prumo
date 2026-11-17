@@ -45,10 +45,11 @@ Todos são **públicos**. Nunca coloque segredo, chave, senha ou e-mail pessoal 
 |---|---|
 | [`prumo`](https://github.com/Health-Prumo/prumo) (este) | Repositório central: proposta, docs, identidade visual, mockups, arquitetura |
 | [`.github`](https://github.com/Health-Prumo/.github) | `profile/README.md` = página de apresentação da organização |
-| [`tf-blueprint`](https://github.com/Health-Prumo/tf-blueprint) | Módulos Terraform reutilizáveis, versionados por tag (hoje `v0.3.0`: `budgets`, `cost-anomaly` e `dns-zone`) |
-| [`tf-environments`](https://github.com/Health-Prumo/tf-environments) | Ambientes em Terragrunt que consomem o `tf-blueprint` (hoje `global/budgets`, `global/cost-anomaly` e `global/dns`) |
+| [`tf-blueprint`](https://github.com/Health-Prumo/tf-blueprint) | Módulos Terraform reutilizáveis, versionados por tag (hoje `v0.4.0`: `budgets`, `cost-anomaly`, `dns-zone` e `static-site`) |
+| [`tf-environments`](https://github.com/Health-Prumo/tf-environments) | Ambientes em Terragrunt que consomem o `tf-blueprint` (hoje `global/budgets`, `global/cost-anomaly`, `global/dns` e `global/landing`) |
 | [`prumo-web`](https://github.com/Health-Prumo/prumo-web) | Front-end (React + TypeScript, Vite). **Ainda sem código**: tem só o próprio `AGENTS.md` com a stack e as regras do front |
 | [`prumo-api`](https://github.com/Health-Prumo/prumo-api) | API (Python, Lambda, DynamoDB, Bedrock). **Ainda sem código**: tem só o próprio `AGENTS.md` com a stack e as regras da API |
+| [`Prumo-landing`](https://github.com/Health-Prumo/Prumo-landing) | Landing page estática (um `index.html`), publicada em `https://healthprumo.online` |
 
 ### Estrutura deste repositório
 
@@ -96,6 +97,7 @@ assets/
 | Orçamento | `prumo-global-mensal`: US$ 40/mês, e-mail em US$ 20 e US$ 40 de gasto real e na previsão de passar de US$ 40 |
 | Anomalias de custo | Monitor `prumo-global-servicos` e assinatura `prumo-global-anomalias`: resumo diário por e-mail quando uma anomalia passa de US$ 5 |
 | Domínio | `healthprumo.online`, registrado na GoDaddy. O DNS é delegado à zona do Route 53 (`global/dns`); todo registro DNS é criado por lá, via Terraform. SPF, DMARC e MX nulo bloqueiam e-mail falso em nome do domínio |
+| Landing page | `https://healthprumo.online` (`www` redireciona), em `global/landing`: S3 privado, CloudFront e certificado do ACM. Conteúdo vem do repositório `Prumo-landing` |
 
 ### Regras que não podem ser quebradas
 

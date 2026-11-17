@@ -61,6 +61,7 @@ O API Gateway, o Cognito, o S3 e o CloudFront são serviços gerenciados que fic
 | **EventBridge Scheduler** | Lembrete diário para registrar o dia | Agendamento sem servidor | 14 milhões de invocações |
 | **CloudWatch Logs** | Logs da Lambda e da API para depuração | Já integrado à Lambda | 5 GB |
 | **Amazon Route 53** | DNS do domínio `healthprumo.online` (registrado na GoDaddy, com o DNS delegado à AWS) | Todos os registros no mesmo lugar e em Terraform; integra com CloudFront e ACM | Não tem: US$ 0,50 por zona por mês, mais US$ 0,40 por milhão de consultas |
+| **AWS Certificate Manager (ACM)** | Certificado HTTPS do `healthprumo.online` e do `www`, usado pelo CloudFront | Certificado público gratuito, renovado sozinho, validado por DNS no Route 53 (precisa estar em `us-east-1`) | Gratuito |
 | **AWS Budgets** | Alertas por e-mail se o gasto passar de um limite | Proteção contra surpresas na fatura | Gratuito |
 | **IAM** | Permissões mínimas para cada função | Obrigatório e gratuito | Gratuito |
 | **Amazon VPC** | Rede privada da Lambda, com subnets em duas zonas | Isola o backend da internet | A VPC e o gateway endpoint são gratuitos; os interface endpoints, não |
@@ -71,10 +72,10 @@ Toda a infraestrutura é descrita em código com **Terraform** (provider `hashic
 
 | Repositório | Conteúdo |
 |---|---|
-| [Health-Prumo/tf-blueprint](https://github.com/Health-Prumo/tf-blueprint) | Módulos Terraform reutilizáveis, versionados por tag (hoje `v0.3.0`). Cada módulo tem `versions.tf`, `variables.tf` com validações, `main.tf`, `outputs.tf` e `README.md`, e o GitHub Actions confere formatação e validação a cada push. |
+| [Health-Prumo/tf-blueprint](https://github.com/Health-Prumo/tf-blueprint) | Módulos Terraform reutilizáveis, versionados por tag (hoje `v0.4.0`). Cada módulo tem `versions.tf`, `variables.tf` com validações, `main.tf`, `outputs.tf` e `README.md`, e o GitHub Actions confere formatação e validação a cada push. |
 | [Health-Prumo/tf-environments](https://github.com/Health-Prumo/tf-environments) | Os ambientes em Terragrunt. Cada ambiente tem um `root.hcl` com o estado remoto e o provider, e cada pasta dentro dele aponta para um módulo do `tf-blueprint` por tag, nunca pela `main`. |
 
-**O que já está na conta (17/11/2026):** as proteções de custo, com o orçamento com alertas (`global/budgets`) e a detecção de anomalias (`global/cost-anomaly`), e a zona DNS do `healthprumo.online` (`global/dns`). Os módulos de rede, banco, login, front-end e API entram no `tf-blueprint` quando a infra for provisionada, num ambiente `dev/`.
+**O que já está na conta (17/11/2026):** as proteções de custo, com o orçamento com alertas (`global/budgets`) e a detecção de anomalias (`global/cost-anomaly`), a zona DNS do `healthprumo.online` (`global/dns`) e a landing page em `https://healthprumo.online` (`global/landing`: S3 privado, CloudFront, certificado do ACM e alias no Route 53). Os módulos de rede, banco, login, front-end e API entram no `tf-blueprint` quando a infra for provisionada, num ambiente `dev/`.
 
 - **Estado remoto no bucket `prumo-terraform-state-444331926746`, com trava nativa (`use_lockfile = true`).** O estado fica no S3 para que os três integrantes trabalhem sobre o mesmo ambiente. A trava nativa do S3 dispensa a tabela do DynamoDB que se usava antes, e o custo é de centavos.
 - **Bucket do estado criado pelo próprio Terragrunt** na primeira execução (`terragrunt init --backend-bootstrap`), com versionamento, criptografia e acesso público bloqueado. Ele não é gerenciado pelo mesmo código que ele guarda.
@@ -236,7 +237,8 @@ O semestre termina em 08/12. Criando a conta agora, o plano Free cobre todo o pr
 | 6 | **Selecionar a região** `us-east-1` no console (ele abre em us-east-2) | ⬜ |
 | 7 | **Liberar no Bedrock o acesso ao modelo** Amazon Nova Micro, se o console pedir | ⬜ |
 | 8 | **Ganhar os créditos extras** com as atividades guiadas do painel do Free Tier (até mais US$ 100) | ⬜ |
-| 9 | **Delegar o DNS do `healthprumo.online`:** zona no Route 53 via `tf-environments/global/dns` e troca dos nameservers na GoDaddy | ✅ zona criada · ⬜ nameservers na GoDaddy |
+| 9 | **Delegar o DNS do `healthprumo.online`:** zona no Route 53 via `tf-environments/global/dns` e troca dos nameservers na GoDaddy | ✅ |
+| 10 | **Publicar a landing page** em `https://healthprumo.online`, via `tf-environments/global/landing` e `aws s3 cp` do repositório `Prumo-landing` | ✅ no ar em 17/11/2026 |
 
 ## Referências
 
