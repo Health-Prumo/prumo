@@ -24,7 +24,7 @@ Levantamento dos serviços da AWS para a primeira versão do Prumo, com custo es
 <sub>Ícones oficiais do pacote AWS Architecture Icons. Versão vetorial: [`assets/arquitetura/arquitetura-aws.svg`](../assets/arquitetura/arquitetura-aws.svg).</sub>
 
 O fluxo principal (registrar o dia e receber a análise), numerado no diagrama, passa por:
-1. **CloudFront e S3:** entregam o site. Antes, o navegador consulta o **Route 53**, que resolve o domínio `healthprumo.online`.
+1. **CloudFront e S3:** entregam a landing page e o app, cada um no seu bucket S3. Antes, o navegador consulta o **Route 53**, que resolve o domínio `healthprumo.online` para o CloudFront.
 2. **Cognito:** faz o login e emite um token.
 3. **API Gateway:** recebe a chamada do app e confere o token no Cognito.
 4. **Lambda:** roda dentro das subnets privadas da VPC, nas duas zonas de disponibilidade.
@@ -51,8 +51,8 @@ O API Gateway, o Cognito, o S3 e o CloudFront são serviços gerenciados que fic
 
 | Serviço | Papel no Prumo | Por que este | Nível gratuito permanente (por mês) |
 |---|---|---|---|
-| **Amazon S3** | Guarda os arquivos do front-end (React já compilado) | Hospedagem estática barata e simples | Não tem; sai dos créditos (centavos) |
-| **Amazon CloudFront** | Entrega o site com HTTPS e cache | HTTPS gratuito, rápido no Brasil e protege o S3 | 1 TB de transferência e 10 milhões de requisições |
+| **Amazon S3** | Guarda os arquivos da landing page e do front-end (React já compilado), em buckets separados | Hospedagem estática barata e simples | Não tem; sai dos créditos (centavos) |
+| **Amazon CloudFront** | Entrega a landing page e o app com HTTPS e cache | HTTPS gratuito, rápido no Brasil e protege o S3 | 1 TB de transferência e 10 milhões de requisições |
 | **Amazon Cognito** | Cadastro, login e recuperação de senha | Login pronto e seguro, sem guardar senhas no nosso código | 10 mil usuários ativos (planos Lite e Essentials) |
 | **API Gateway (HTTP API)** | Porta de entrada da API, valida o token do Cognito | HTTP API custa cerca de 70% menos que a REST API e já valida JWT | Não tem; sai dos créditos (centavos) |
 | **AWS Lambda** | Backend em Python: registro, motor de pontuação, chamada à IA | Paga só quando executa; arquitetura ARM é 20% mais barata | 1 milhão de execuções e 400 mil GB-segundo |

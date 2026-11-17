@@ -110,7 +110,7 @@ assets/
 Diagrama: [`assets/arquitetura/arquitetura-aws.png`](assets/arquitetura/arquitetura-aws.png). Detalhes, preços oficiais e estimativa: [`docs/06-infraestrutura-aws.md`](docs/06-infraestrutura-aws.md).
 
 - **DNS:** Route 53 com a zona `healthprumo.online` (domínio registrado na GoDaddy, DNS delegado).
-- **Front-end:** CloudFront + S3 privado (Origin Access Control).
+- **Front-end e landing page:** CloudFront + S3 privado (Origin Access Control), um bucket para o app e outro para a landing.
 - **Login:** Cognito; o API Gateway valida o JWT.
 - **API:** API Gateway HTTP API → Lambda (Python, arm64) em **subnets privadas de 2 AZs**.
 - **Rede:** VPC `10.0.0.0/16`, sem NAT Gateway. DynamoDB por gateway endpoint (grátis); Bedrock Runtime e CloudWatch Logs por interface endpoints. As subnets públicas ficam reservadas, sem recursos.
