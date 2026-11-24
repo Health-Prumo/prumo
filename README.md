@@ -13,7 +13,7 @@
 
 ## Status
 
-🟡 **Checkpoint 2: protótipo funcional** (09/11 a 27/11/2026). O app está no ar em **https://app.healthprumo.online**, com a API em `https://api.healthprumo.online`. Código em [prumo-web](https://github.com/Health-Prumo/prumo-web) e [prumo-api](https://github.com/Health-Prumo/prumo-api). Este repositório reúne a proposta, os docs e a identidade visual.
+🟡 **Checkpoint 2: protótipo funcional** (09/11 a 27/11/2026). O app está no ar em **https://app.healthprumo.online**, com a API em `https://api.healthprumo.online`. O app Android pode ser baixado em **https://download.healthprumo.online**. Código em [prumo-web](https://github.com/Health-Prumo/prumo-web), [prumo-mobile](https://github.com/Health-Prumo/prumo-mobile) e [prumo-api](https://github.com/Health-Prumo/prumo-api). Este repositório reúne a proposta, os docs e a identidade visual.
 
 ## Pitch
 

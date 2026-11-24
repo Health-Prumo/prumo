@@ -51,8 +51,8 @@ O API Gateway, o Cognito, o S3 e o CloudFront são serviços gerenciados que fic
 
 | Serviço | Papel no Prumo | Por que este | Nível gratuito permanente (por mês) |
 |---|---|---|---|
-| **Amazon S3** | Guarda os arquivos da landing page e do front-end (React já compilado), em buckets separados | Hospedagem estática barata e simples | Não tem; sai dos créditos (centavos) |
-| **Amazon CloudFront** | Entrega a landing page e o app com HTTPS e cache | HTTPS gratuito, rápido no Brasil e protege o S3 | 1 TB de transferência e 10 milhões de requisições |
+| **Amazon S3** | Guarda os arquivos da landing page, do front-end (React já compilado) e do download do app Android (APK), em buckets separados | Hospedagem estática barata e simples | Não tem; sai dos créditos (centavos) |
+| **Amazon CloudFront** | Entrega a landing page, o app e o APK com HTTPS e cache | HTTPS gratuito, rápido no Brasil e protege o S3 | 1 TB de transferência e 10 milhões de requisições |
 | **Amazon Cognito** | Cadastro, login e recuperação de senha | Login pronto e seguro, sem guardar senhas no nosso código | 10 mil usuários ativos (planos Lite e Essentials) |
 | **API Gateway (HTTP API)** | Porta de entrada da API, valida o token do Cognito | HTTP API custa cerca de 70% menos que a REST API e já valida JWT | Não tem; sai dos créditos (centavos) |
 | **AWS Lambda** | Backend em Python: registro, motor de pontuação, chamada à IA | Paga só quando executa; arquitetura ARM é 20% mais barata | 1 milhão de execuções e 400 mil GB-segundo |
@@ -86,8 +86,9 @@ Toda a infraestrutura é descrita em código com **Terraform** (provider `hashic
 | `dev/auth` | Cognito (plano Lite), login por e-mail |
 | `dev/api` | Lambda `prumo-dev-api` (Python 3.12, arm64, na VPC) atrás da HTTP API com autorizador JWT, em `https://api.healthprumo.online` |
 | `dev/web` | Front-end em `https://app.healthprumo.online` (S3 privado e CloudFront) |
+| `dev/mobile` | Download do app Android em `https://download.healthprumo.online` (S3 privado, CloudFront e ACM; `static-site` sem SPA) |
 
-O código da Lambda e do front é publicado pelos `scripts/deploy.sh` do `prumo-api` e do `prumo-web`, não pelo Terraform.
+O código da Lambda, do front e o APK são publicados pelos `scripts/deploy.sh` do `prumo-api`, do `prumo-web` e do `prumo-mobile`, não pelo Terraform.
 
 - **Estado remoto no bucket `prumo-terraform-state-444331926746`, com trava nativa (`use_lockfile = true`).** O estado fica no S3 para que os três integrantes trabalhem sobre o mesmo ambiente. A trava nativa do S3 dispensa a tabela do DynamoDB que se usava antes, e o custo é de centavos.
 - **Bucket do estado criado pelo próprio Terragrunt** na primeira execução (`terragrunt init --backend-bootstrap`), com versionamento, criptografia e acesso público bloqueado. Ele não é gerenciado pelo mesmo código que ele guarda.
@@ -252,6 +253,7 @@ O semestre termina em 08/12. Criando a conta agora, o plano Free cobre todo o pr
 | 9 | **Delegar o DNS do `healthprumo.online`:** zona no Route 53 via `tf-environments/global/dns` e troca dos nameservers na GoDaddy | ✅ |
 | 10 | **Publicar a landing page** em `https://healthprumo.online`, via `tf-environments/global/landing` e `aws s3 cp` do repositório `Prumo-landing` | ✅ no ar em 17/11/2026 |
 | 11 | **Subir o app** (`tf-environments/dev`): rede, banco, login, API e front, em `https://app.healthprumo.online` | ✅ no ar em 24/11/2026 |
+| 12 | **Publicar o app Android** (`tf-environments/dev/mobile` e `scripts/deploy.sh` do `prumo-mobile`) em `https://download.healthprumo.online` | ✅ no ar em 24/11/2026 (v0.1.0) |
 
 ## Referências
 
