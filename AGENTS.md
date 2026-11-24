@@ -34,7 +34,7 @@ Professor mentor e licença: **a definir**.
 | Período | Etapa | Status |
 |---|---|---|
 | 19/10 a 30/10/2026 | Checkpoint 1: Ideação (problema, bases, solução, identidade, pitch) | Concluído |
-| 09/11 a 27/11/2026 | Checkpoint 2: protótipo funcional, README com prints e vídeo | Em andamento |
+| 09/11 a 27/11/2026 | Checkpoint 2: protótipo funcional, README com prints e vídeo | Em andamento: app no ar em 24/11 |
 | 07 e 08/12/2026 | Apresentação final à banca | — |
 
 ## 3. Repositórios (organização GitHub `Health-Prumo`)
@@ -45,10 +45,10 @@ Todos são **públicos**. Nunca coloque segredo, chave, senha ou e-mail pessoal 
 |---|---|
 | [`prumo`](https://github.com/Health-Prumo/prumo) (este) | Repositório central: proposta, docs, identidade visual, mockups, arquitetura |
 | [`.github`](https://github.com/Health-Prumo/.github) | `profile/README.md` = página de apresentação da organização |
-| [`tf-blueprint`](https://github.com/Health-Prumo/tf-blueprint) | Módulos Terraform reutilizáveis, versionados por tag (hoje `v0.4.0`: `budgets`, `cost-anomaly`, `dns-zone` e `static-site`) |
-| [`tf-environments`](https://github.com/Health-Prumo/tf-environments) | Ambientes em Terragrunt que consomem o `tf-blueprint` (hoje `global/budgets`, `global/cost-anomaly`, `global/dns` e `global/landing`) |
-| [`prumo-web`](https://github.com/Health-Prumo/prumo-web) | Front-end (React + TypeScript, Vite). **Ainda sem código**: tem só o próprio `AGENTS.md` com a stack e as regras do front |
-| [`prumo-api`](https://github.com/Health-Prumo/prumo-api) | API (Python, Lambda, DynamoDB, Bedrock). **Ainda sem código**: tem só o próprio `AGENTS.md` com a stack e as regras da API |
+| [`tf-blueprint`](https://github.com/Health-Prumo/tf-blueprint) | Módulos Terraform reutilizáveis, versionados por tag (hoje `v0.5.0`: `budgets`, `cost-anomaly`, `dns-zone`, `static-site`, `network`, `dynamodb-table`, `cognito-auth` e `serverless-api`) |
+| [`tf-environments`](https://github.com/Health-Prumo/tf-environments) | Ambientes em Terragrunt que consomem o `tf-blueprint` (hoje `global/budgets`, `global/cost-anomaly`, `global/dns` e `global/landing`, e o app em `dev/network`, `dev/data`, `dev/auth`, `dev/api` e `dev/web`) |
+| [`prumo-web`](https://github.com/Health-Prumo/prumo-web) | Front-end (React + TypeScript, Vite), no ar em `https://app.healthprumo.online`. Publicação por `scripts/deploy.sh` |
+| [`prumo-api`](https://github.com/Health-Prumo/prumo-api) | API (Python, Lambda, DynamoDB, Bedrock), no ar em `https://api.healthprumo.online`. Publicação por `scripts/deploy.sh` |
 | [`Prumo-landing`](https://github.com/Health-Prumo/Prumo-landing) | Landing page estática (um `index.html`), publicada em `https://healthprumo.online` |
 
 ### Estrutura deste repositório
@@ -98,6 +98,7 @@ assets/
 | Anomalias de custo | Monitor `prumo-global-servicos` e assinatura `prumo-global-anomalias`: resumo diário por e-mail quando uma anomalia passa de US$ 5 |
 | Domínio | `healthprumo.online`, registrado na GoDaddy. O DNS é delegado à zona do Route 53 (`global/dns`); todo registro DNS é criado por lá, via Terraform. SPF, DMARC e MX nulo bloqueiam e-mail falso em nome do domínio |
 | Landing page | `https://healthprumo.online` (`www` redireciona), em `global/landing`: S3 privado, CloudFront e certificado do ACM. Conteúdo vem do repositório `Prumo-landing` |
+| App (`dev/`) | Front em `https://app.healthprumo.online` e API em `https://api.healthprumo.online` (Lambda `prumo-dev-api`, tabela `prumo-dev-dados`, Cognito Lite). Interface endpoints **ligados** (cerca de US$ 29,20/mês); para desligar, `interface_endpoint_services = []` no `dev/network` e `PRUMO_IA = "mock"` no `dev/api` |
 
 ### Regras que não podem ser quebradas
 
@@ -180,15 +181,9 @@ Guia completo em [`docs/04-identidade-visual.md`](docs/04-identidade-visual.md).
 
 - Definir o público final (adultos sedentários ou universitários).
 - Definir professor mentor e licença.
-- Checkpoint 2: montar o código do `prumo-web` e do `prumo-api`, calibrar os pesos da nota de energia, gerar `data/referencias.json` a partir das bases (ver "Pendências" em `docs/02-bases-de-dados.md`).
-- Qualidade e segurança: configurar junto com o esqueleto do `prumo-api` e do `prumo-web`, no mesmo PR:
-
-| Onde | Ferramentas |
-|---|---|
-| `prumo-api` | `ruff` (lint e formatação), `mypy` (tipos), `pytest` (foco nas regras de pontuação), `bandit` (segurança) |
-| `prumo-web` | TypeScript `strict`, ESLint e Prettier, Vitest |
-| Todos os repositórios | `gitleaks` no pre-commit e no GitHub Actions (repositórios públicos), Dependabot, CodeQL |
-| `tf-blueprint` e `tf-environments` | `tflint` e `checkov` no GitHub Actions, além do `fmt -check` e `validate` que já existem |
-
-- Infra: criar no `tf-blueprint` os módulos de rede, dados, login, front-end e API, e o ambiente `dev/` no `tf-environments`.
+- Checkpoint 2: calibrar os pesos da nota de energia (hoje iguais e provisórios, em `PRUMO_PESOS`) e trocar os indicadores do Vigitel e da PNS marcados como pendentes no `referencias.json` do `prumo-api` pelos números reais (ver "Pendências" em `docs/02-bases-de-dados.md`). README com prints e vídeo.
+- Qualidade e segurança: já rodam no GitHub Actions o `ruff`, `mypy`, `bandit` e `pytest` no `prumo-api`; TypeScript `strict`, ESLint, Prettier e Vitest no `prumo-web`; `gitleaks` e Dependabot nos dois. Faltam o `gitleaks` no pre-commit, o CodeQL e os repositórios de Terraform.
+- Bedrock: a conta estava em verificação pela AWS em 24/11 e o Nova Micro respondia `AccessDeniedException`; a API cai no modo mock até liberar. Conferir de novo e testar o card real.
+- EventBridge Scheduler (resumo diário): a API já aceita o evento, mas o agendamento ainda não foi criado no Terraform.
+- `tflint` e `checkov` no CI do `tf-blueprint` e do `tf-environments`.
 - Conta AWS: liberar o Nova Micro no Bedrock se o console pedir e fazer as atividades guiadas para ganhar até mais US$ 100 de créditos.
