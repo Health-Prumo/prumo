@@ -104,7 +104,7 @@ O código da Lambda, do front e o APK são publicados pelos `scripts/deploy.sh` 
 |---|---|---|
 | `USUARIO#<id>` | `PERFIL` | Idade, sexo, metas, consentimento LGPD |
 | `USUARIO#<id>` | `DIA#2026-10-31` | Registro do dia, notas calculadas e o texto da análise |
-| `USUARIO#<id>` | `CHAT#<data e hora>` | Pergunta e resposta do Coach (expira em 90 dias por TTL) |
+| `USUARIO#<id>` | `CHAT#<data e hora>` | Pergunta e resposta do Coach (expira em 7 dias por TTL) |
 
 Uma consulta por usuário e intervalo de datas traz os últimos 7 ou 30 dias de uma vez, que é o que o histórico e o motor de pontuação precisam.
 
@@ -235,7 +235,7 @@ O semestre termina em 08/12. Criando a conta agora, o plano Free cobre todo o pr
 - **Concorrência reservada da Lambda de IA:** por exemplo, 5 execuções simultâneas.
 - **Limite de tokens no Bedrock:** `maxTokens` de 400 na saída e o histórico do chat resumido, nunca enviado inteiro.
 - **Retenção dos logs no CloudWatch:** 14 dias.
-- **TTL no DynamoDB:** as conversas do Coach expiram em 90 dias.
+- **TTL no DynamoDB:** as conversas do Coach se apagam sozinhas em 7 dias (a API já ignora as vencidas, porque o TTL pode atrasar).
 
 ## Primeiro dia na conta
 
