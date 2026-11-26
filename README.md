@@ -21,6 +21,35 @@ Quase um terço dos adultos do mundo não se movimenta o suficiente, e boa parte
 
 → [Pitch completo](docs/05-pitch.md)
 
+## O app funcionando
+
+Prints do app no ar, no celular (web e Android) e no computador. Os dados são de uma usuária fictícia, com 14 dias de registros de exemplo. As respostas do Coach vêm do modo de teste da API.
+
+<table>
+  <tr>
+    <td align="center" width="25%"><img src="assets/prints/celular-abertura.png" alt="Abertura do app Android, com o símbolo do Prumo sobre o fundo esmeralda" width="100%"><br><b>Abertura</b><br><sub>Fio de prumo animado</sub></td>
+    <td align="center" width="25%"><img src="assets/prints/celular-entrar.png" alt="Tela de login do Prumo" width="100%"><br><b>Entrar</b><br><sub>Login com Amazon Cognito</sub></td>
+    <td align="center" width="25%"><img src="assets/prints/celular-hoje.png" alt="Tela Hoje com a nota de energia e as sugestões do dia" width="100%"><br><b>Hoje</b><br><sub>Nota de energia e sugestões</sub></td>
+    <td align="center" width="25%"><img src="assets/prints/celular-registrar.png" alt="Tela de registro do dia com sono, atividade, água e alimentação" width="100%"><br><b>Registrar o dia</b><br><sub>Menos de 1 minuto</sub></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="assets/prints/celular-historico.png" alt="Histórico com gráficos de energia e sono" width="100%"><br><b>Histórico</b><br><sub>Evolução em 7 e 30 dias</sub></td>
+    <td align="center"><img src="assets/prints/celular-coach.png" alt="Conversa com o Coach Prumo sobre sono e energia" width="100%"><br><b>Coach IA</b><br><sub>Conhece os últimos 30 dias</sub></td>
+    <td align="center"><img src="assets/prints/celular-perfil.png" alt="Perfil com exportação e exclusão dos dados" width="100%"><br><b>Perfil e privacidade</b><br><sub>Exportar e apagar (LGPD)</sub></td>
+    <td align="center" valign="middle"><b>Experimente</b><br><br><a href="https://app.healthprumo.online">app.healthprumo.online</a><br><sub>no navegador</sub><br><br><a href="https://download.healthprumo.online">download.healthprumo.online</a><br><sub>app Android</sub></td>
+  </tr>
+</table>
+
+**No computador: tela Hoje**
+
+<img src="assets/prints/computador-hoje.png" alt="Tela Hoje do Prumo no computador, com a análise do dia, a meta semanal da OMS e os hábitos" width="100%">
+
+**No computador: Histórico**
+
+<img src="assets/prints/computador-historico.png" alt="Histórico do Prumo no computador, com gráficos de energia e hábitos" width="100%">
+
+No Android, o login fica salvo entre uma abertura e outra. Quando sai versão nova, o app avisa e atualiza com um toque, sem desinstalar.
+
 ## O problema
 
 Adultos sedentários sabem que precisam mudar de hábitos, mas não enxergam a própria rotina com clareza nem conseguem transformar recomendações genéricas em ações concretas para o dia de hoje.
@@ -51,13 +80,14 @@ Login ─► Registrar o dia ─► Análise da IA ─► Histórico e gráficos
 
 A decisão central é **separar o cálculo da explicação**: o código calcula as notas com regras fixas (comparando com a média dos últimos 7 dias do usuário e com as metas oficiais), e o LLM só transforma esses números num card "Seu dia" com 1 ou 2 sugestões. Um chatbot que conhece o histórico do usuário completa a experiência.
 
-| Camada    | Tecnologia                                                                      |
-| --------- | ------------------------------------------------------------------------------- |
-| Front-end | React + TypeScript (Vite), web responsivo, Recharts                             |
-| API       | Python (local; alvo: API Gateway + AWS Lambda)                                  |
-| Banco     | Local no desenvolvimento; alvo: DynamoDB                                        |
-| Login     | Alvo: Amazon Cognito                                                            |
-| IA        | Amazon Bedrock (Claude Haiku ou Nova Micro), com modo mock para desenvolvimento |
+| Camada      | Tecnologia                                                                  |
+| ----------- | --------------------------------------------------------------------------- |
+| Front-end   | React + TypeScript (Vite), web responsivo, Recharts                         |
+| App Android | Capacitor 8 sobre o mesmo front, APK em download.healthprumo.online         |
+| API         | Python no AWS Lambda, atrás do API Gateway (HTTP API)                       |
+| Banco       | Amazon DynamoDB (tabela única)                                              |
+| Login       | Amazon Cognito                                                              |
+| IA          | Amazon Bedrock com Amazon Nova Micro, com modo mock para desenvolvimento    |
 
 → [Proposta completa, regras de pontuação, justificativas e LGPD](docs/03-solucao.md)
 
@@ -84,7 +114,7 @@ Arquitetura serverless em `us-east-1`, com a Lambda em subnets privadas de duas 
 
 ## Protótipo visual
 
-Primeira proposta de interface, já com a identidade visual aplicada. Os dados são fictícios.
+Primeira proposta de interface, do Checkpoint 1, que serviu de base para o app. Os dados são fictícios.
 
 **Web: tela inicial ("Hoje")**
 
@@ -107,6 +137,7 @@ Os mockups são feitos em HTML e CSS, em [`assets/mockups/src/`](assets/mockups/
 │   ├── brand/          # logo, símbolo e ícone do app (SVG)
 │   │   ├── png/        # exportações em PNG, paleta e o ícone original
 │   │   └── src/        # fonte da paleta em HTML
+│   ├── prints/         # prints do app funcionando (celular e computador)
 │   ├── mockups/        # protótipo visual (PNG)
 │   │   └── src/        # fontes dos mockups em HTML e CSS
 │   └── arquitetura/    # diagrama da arquitetura AWS (SVG e PNG)

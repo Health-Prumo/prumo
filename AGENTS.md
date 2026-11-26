@@ -68,6 +68,7 @@ docs/
   07-pesquisa-rag.md            # fontes candidatas, limites e proposta de curadoria para o RAG
 assets/
   brand/                        # logos e símbolo (SVG), png/ (exportações, paleta, avatar), src/paleta.html
+  prints/                       # prints do app no ar (celular-*.png e computador-*.png), usados no README
   mockups/                      # desktop-hoje.png, mobile-telas.png; src/ = HTML/CSS dos mockups
   arquitetura/                  # arquitetura-aws.svg e .png
 ```
@@ -184,7 +185,7 @@ Guia completo em [`docs/04-identidade-visual.md`](docs/04-identidade-visual.md).
 
 - Definir o público final (adultos sedentários ou universitários).
 - Definir professor mentor e licença.
-- Checkpoint 2: calibrar os pesos da nota de energia (hoje iguais e provisórios, em `PRUMO_PESOS`) e trocar os indicadores do Vigitel e da PNS marcados como pendentes no `referencias.json` do `prumo-api` pelos números reais (ver "Pendências" em `docs/02-bases-de-dados.md`). README com prints e vídeo.
+- Checkpoint 2: calibrar os pesos da nota de energia (hoje iguais e provisórios, em `PRUMO_PESOS`) e trocar os indicadores do Vigitel e da PNS marcados como pendentes no `referencias.json` do `prumo-api` pelos números reais (ver "Pendências" em `docs/02-bases-de-dados.md`). Prints no README feitos em 26/11 (usuária fictícia, API local com dados de exemplo); falta o vídeo.
 - Qualidade e segurança: já rodam no GitHub Actions o `ruff`, `mypy`, `bandit` e `pytest` no `prumo-api`; TypeScript `strict`, ESLint, Prettier e Vitest no `prumo-web`; `gitleaks` e Dependabot no `prumo-api`, no `prumo-web` e no `prumo-mobile` (que também compila o APK no CI). Faltam o `gitleaks` no pre-commit, o CodeQL e os repositórios de Terraform.
 - Bedrock: a conta estava em verificação pela AWS em 24/11 e o Nova Micro respondia `AccessDeniedException`; a API cai no modo mock até liberar. Conferir de novo e testar o card real.
 - EventBridge Scheduler (resumo diário): a API já aceita o evento, mas o agendamento ainda não foi criado no Terraform.
