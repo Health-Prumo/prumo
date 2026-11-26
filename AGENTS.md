@@ -77,7 +77,7 @@ assets/
 | Camada | Tecnologia |
 |---|---|
 | Front-end | React + TypeScript (Vite), web responsivo, Recharts |
-| App Android | Capacitor 8 sobre o build do `prumo-web` (mesmas telas, API e login). APK fora da Play Store |
+| App Android | Capacitor 8 sobre o build do `prumo-web` (mesmas telas, API e login). APK fora da Play Store, com atualização dentro do app |
 | API | Python (local no desenvolvimento; na AWS, API Gateway HTTP API + Lambda Python ARM) |
 | Banco | Local no desenvolvimento; na AWS, DynamoDB (tabela única) |
 | Login | Amazon Cognito (plano Lite) |
@@ -100,7 +100,7 @@ assets/
 | Anomalias de custo | Monitor `prumo-global-servicos` e assinatura `prumo-global-anomalias`: resumo diário por e-mail quando uma anomalia passa de US$ 5 |
 | Domínio | `healthprumo.online`, registrado na GoDaddy. O DNS é delegado à zona do Route 53 (`global/dns`); todo registro DNS é criado por lá, via Terraform. SPF, DMARC e MX nulo bloqueiam e-mail falso em nome do domínio |
 | Landing page | `https://healthprumo.online` (`www` redireciona), em `global/landing`: S3 privado, CloudFront e certificado do ACM. Conteúdo vem do repositório `Prumo-landing` |
-| Download do app | `https://download.healthprumo.online`, em `dev/mobile`: S3 privado, CloudFront e ACM. Página de download e APK vêm do `prumo-mobile`. A chave de assinatura do APK fica fora dos repositórios: sem ela, o celular não aceita atualização |
+| Download do app | `https://download.healthprumo.online`, em `dev/mobile`: S3 privado, CloudFront e ACM. Página de download e APK vêm do `prumo-mobile`. A chave de assinatura do APK fica fora dos repositórios: sem ela, o celular não aceita atualização. A partir da 0.3.0, o app lê o `versao.json` publicado ali, avisa que há versão nova e atualiza com um toque, sem desinstalar |
 | App (`dev/`) | Front em `https://app.healthprumo.online` e API em `https://api.healthprumo.online` (Lambda `prumo-dev-api`, tabela `prumo-dev-dados`, Cognito Lite). Interface endpoints **ligados** (cerca de US$ 29,20/mês); para desligar, `interface_endpoint_services = []` no `dev/network` e `PRUMO_IA = "mock"` no `dev/api` |
 
 ### Regras que não podem ser quebradas
@@ -189,6 +189,6 @@ Guia completo em [`docs/04-identidade-visual.md`](docs/04-identidade-visual.md).
 - Bedrock: a conta estava em verificação pela AWS em 24/11 e o Nova Micro respondia `AccessDeniedException`; a API cai no modo mock até liberar. Conferir de novo e testar o card real.
 - EventBridge Scheduler (resumo diário): a API já aceita o evento, mas o agendamento ainda não foi criado no Terraform.
 - Diagrama de arquitetura: regenerar (fora do repositório) com o CloudFront e o S3 do download do app Android (`dev/mobile`).
-- App Android: testar o fluxo completo num celular real; Play Store só se o grupo decidir.
+- App Android: testar o fluxo completo num celular real, inclusive o botão de atualizar (precisa de uma versão maior que a 0.3.0 publicada); Play Store só se o grupo decidir.
 - `tflint` e `checkov` no CI do `tf-blueprint` e do `tf-environments`.
 - Conta AWS: liberar o Nova Micro no Bedrock se o console pedir e fazer as atividades guiadas para ganhar até mais US$ 100 de créditos.
