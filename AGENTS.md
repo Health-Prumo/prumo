@@ -189,6 +189,6 @@ Guia completo em [`docs/04-identidade-visual.md`](docs/04-identidade-visual.md).
 - Bedrock: a conta estava em verificação pela AWS em 24/11 e o Nova Micro respondia `AccessDeniedException`; a API cai no modo mock até liberar. Conferir de novo e testar o card real.
 - EventBridge Scheduler (resumo diário): a API já aceita o evento, mas o agendamento ainda não foi criado no Terraform.
 - Diagrama de arquitetura: regenerar (fora do repositório) com o CloudFront e o S3 do download do app Android (`dev/mobile`).
-- App Android: testar o fluxo completo num celular real, inclusive o botão de atualizar (precisa de uma versão maior que a 0.3.0 publicada); Play Store só se o grupo decidir.
+- App Android: a atualização pelo botão e a abertura animada foram testadas num celular real em 26/11 (0.3.0 → 0.3.1). Falta testar o fluxo completo de uso (login, registro, análise, histórico) no celular; Play Store só se o grupo decidir.
 - `tflint` e `checkov` no CI do `tf-blueprint` e do `tf-environments`.
 - Conta AWS: liberar o Nova Micro no Bedrock se o console pedir e fazer as atividades guiadas para ganhar até mais US$ 100 de créditos.
